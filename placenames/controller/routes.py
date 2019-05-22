@@ -1,4 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, Response, render_template
+from placenames.model.placename import Placename
+from pyldapi import View
 
 routes = Blueprint('controller', __name__)
 
@@ -9,10 +11,11 @@ def home():
 
 
 @routes.route('/place/')
-def places():
+def placenames():
     return 'register of Places'
 
 
-@routes.route('/place/<string:place_id>')
-def place(place_id):
-    return render_template('place.html', id=place_id)
+@routes.route('/placename/<string:placename_id>')
+def placename(placename_id):
+    pn = Placename(request, request.base_url)
+    return pn.render()
