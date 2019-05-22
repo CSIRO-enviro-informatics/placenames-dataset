@@ -1,4 +1,4 @@
-rdflib
-pyldapi
-psycopg2
-flask
+Flask==1.0.3
+psycopg2==2.8.2
+rdflib==4.2.2
+pyldapi==2.1.2.post4
