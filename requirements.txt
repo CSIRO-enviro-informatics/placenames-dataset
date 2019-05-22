@@ -1,0 +1,4 @@
+rdflib
+pyldapi
+psycopg2
+flask
