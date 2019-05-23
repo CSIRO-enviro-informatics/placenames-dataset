@@ -27,37 +27,49 @@ class Placename(Renderer):
         }
 
         super(Placename, self).__init__(request, uri, views, 'pn', None)
-        self.id = 'not_needed_in_testing'  # get this from the request object's URI
+        self.id = uri.split('/')[-1]
 
-        # for place in conf.db_select('SELECT ...'):
-        #     pass
-
-        '''
-        "ID","AUTH_ID","NAME","FEATURE","CATEGORY","GROUP","LATITUDE","LONGITUDE","AUTHORITY","SUPPLY_DATE","geom"
-        '''
-
-        '''
-        
-        "WA_100039525","100039525","Willow Well","BORE","WATER POINT","HYDROLOGY","-27.80843","118.47919","WA","2018-02-19 02:57:38","0101000020BB1000007FA4880CAB9E5D40F41ABB44F5CE3BC0"
-        "WA_100040525","100040525","Wyening Mission","MISSION","PLACE OF WORSHIP","CULTURE","-31.16154","116.5423","WA","2018-02-19 02:57:52","0101000020BB100000BB270F0BB5225D40EFFE78AF5A293FC0"
-        '''
-        dummy_instance = {
-            'id': "WA_100156123",
-            'auth_id': "100156123",
-            'name': "Dummy Well",
-            'feature': "BORE",
-            'category': "WATER POINT",
-            'group': "HYDROLOGY",
-            'latitude': "-25.9126",
-            'longitude': "116.75556",
-            'authority': "WA",
-            'supply_date': "2018-02-19 02:57:40",
-            'geom': "0101000020BB1000009C8A54185B305D4061545227A0E939C0",
-            'pronunciation': 'dummee wel'  # not in current data
+        self.hasName = {
+            'uri': 'http://linked.data.gov.au/def/placename/hasName',
+            'label': 'has name',
+            'comment': 'The Entity has a name (label) which is a text sting.',
+            'value': None
         }
 
         gazetteers = {
-            'Antarctica': {
+            'AAD': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'ACT': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'AHO': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'NSW': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'NT': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'QLD': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'SA': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'TAS': {
+                'label': 'Australian Antarctica Gazetteer',
+                'uri_id': 'aag'
+            },
+            'VIC': {
                 'label': 'Australian Antarctica Gazetteer',
                 'uri_id': 'aag'
             },
@@ -66,6 +78,40 @@ class Placename(Renderer):
                 'uri_id': 'wa'
             }
         }
+
+        self.register = {
+            'label': None,
+            'uri': None
+        }
+
+        self.wasNamedBy = {
+            'label': None,
+            'uri': None
+        }
+
+        self.hasNameFormality = {
+            'label': 'Official',
+            'uri': 'http://linked.data.gov.au/def/placenames/nameFormality/Official'
+        }
+
+        self.modifiedDate = None
+
+        self.hasPronunciation = 'abcABCabc'
+
+        q = '''
+            SELECT 
+              	"NAME",
+                "AUTHORITY",
+                "SUPPLY_DATE"
+            FROM "PLACENAMES"
+            WHERE "ID" = '{}'
+        '''.format(self.id)
+        for placename in conf.db_select(q):
+            self.hasName['value'] = str(placename[0])
+            self.register['label'] = str(placename[1])
+            self.register['uri'] = 'http://linked.data.gov.au/dataset/placenames/gazetteer/' + str(placename[1])
+            self.modifiedDate = placename[2]
+
 
         naming_authorities = {
             'ACT': {
@@ -82,26 +128,6 @@ class Placename(Renderer):
             }
         }
 
-        self.hasName = {
-            'uri': 'http://linked.data.gov.au/def/placename/hasName',
-            'label': 'has name',
-            'comment': 'The Entity has a name (label) which is a text sting.',
-            'value': dummy_instance.get('name')
-        }
-        self.register = {
-            'label': gazetteers.get(dummy_instance.get('authority'))['label'],
-            'uri': conf.GAZETTEER_INSTANCE_URI_STEM + gazetteers.get(dummy_instance.get('authority'))['uri_id']
-        }
-        self.wasNamedBy = {
-            'label': naming_authorities.get(dummy_instance.get('authority'))['label'],
-            'uri': conf.JURISDICTION_INSTANCE_URI_STEM + naming_authorities.get(dummy_instance.get('authority'))['uri_id']
-        }
-        self.hasNameFormality = {
-            'label': 'Official',
-            'uri': 'http://linked.data.gov.au/def/placenames/nameFormality/Official'
-        }
-        self.hasPronunciation = dummy_instance.get('pronunciation')
-
     def render(self):
         if self.view == 'alternates':
             return self._render_alternates_view()
@@ -114,12 +140,13 @@ class Placename(Renderer):
         return Response(
             render_template(
                 'placename.html',
-                id="TEST",
+                id=self.id,
                 hasName=self.hasName,
                 hasPronunciation=self.hasPronunciation,
                 register=self.register,
                 wasNamedBy=self.wasNamedBy,
-                hasNameFormality=self.hasNameFormality
+                hasNameFormality=self.hasNameFormality,
+                modifiedDate=self.modifiedDate
                 # schemaorg=self.export_schemaorg()
             ),
             status=200,
