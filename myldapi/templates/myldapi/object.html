@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>{{objectType}} {{ id }}</h1>
+<p><code>{{ uri }}</code></p>
+<dl>
+    {% for item in properties %}
+    <dt><a title="{{ item.title }}" href="{{ item.uri }}">{{ item.label }}</a></dt>
+    <dd>{{ item.value }}</dd>
+    {% endfor %}
+</dl>
+<p>
+    Alternative views and formats for this resource:
+</p>
+<ul>
+    <li><a href="?_view=alternates">Alternate Views</a></li>
+</ul>
+{% endblock %}
