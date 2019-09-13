@@ -6,7 +6,7 @@ class HTML(Format):
             template
     ):
         self.label = "HTML Formatter"
-        self.comment = "Converts the graph in html"
+        self.comment = "Provides a human readable HTML page."
         self.mediaType = "text/html"
         self.template = template
 

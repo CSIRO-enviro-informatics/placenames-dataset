@@ -2,25 +2,36 @@ from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url
 
 
 class MyLDApi(object):
-    def __init__(self, app=None):
+    def __init__(self, app=None, registers=[]):
         self.app = app
+        self.registers = registers
         if app is not None:
             self.init_app(app)
 
     def init_app(self, app):
+        app.config.setdefault('APP_TITLE', 'LDAPI Instance')
+
         #create a blueprint and attach it to the app?
-        blueprint = Blueprint("myldapi", __name__, 
+        self.blueprint = Blueprint("myldapi", __name__, 
             static_folder="static",
             template_folder="templates")
 
-        blueprint.add_url_rule('/object', 'object', self.show_object)
+        self.blueprint.add_url_rule("/object", "object", self.show_object)
+        self.blueprint.add_url_rule("/", "home", self.show_home)
 
-        app.register_blueprint(blueprint)
+        app.register_blueprint(self.blueprint)
+
+    def show_home(self):
+        # Need to check headers, as this could be showing the reg-of-reg etc
+        return render_template("myldapi/home.html")
 
     #this function is here to allow linkdata.gov.au redirect to be cleaner
-    def show_object():
-        uri = request.args.get('uri', type=str, default=None)
-        #if we know about this tupe
+    def show_object(self):
+        uri = request.args.get('uri', type=str, default=None)        
+        creator = next((group for group in self.groups if group.creator_for_uri(uri) != None), None)
+        if creator != None:
             #redirect to the clean url
-        #else
+            pass
+        else:
+            pass
             #show an error

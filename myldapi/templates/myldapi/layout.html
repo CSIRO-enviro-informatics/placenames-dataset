@@ -2,8 +2,8 @@
 <html>
 <head lang="en">
     <meta charset="utf-8">
-    <title>Place Names</title>
-    <link rel="stylesheet" href="{{ url_for('.static', filename='simple.css') }}" />
+    <title>{{config.APP_TITLE}}</title>
+    <link rel="stylesheet" href="{{ url_for('.static', filename='default.css') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli">
     {% block extra_head_stylesheets%}
     {% endblock %}
@@ -18,7 +18,7 @@
     </header>
     <div id="content">
         {% block content %}{% endblock %}
-    </div><!-- content -->
+    </div>
     <footer>
         <a href="https://creativecommons.org/licenses/by/4.0/">Licensed using Creative Commons 4.0</a>.
     </footer>
