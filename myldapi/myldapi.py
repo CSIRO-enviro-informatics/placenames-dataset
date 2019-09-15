@@ -14,7 +14,8 @@ class MyLDApi(object):
         # create a blueprint and attach it to the app?
         self.blueprint = Blueprint("myldapi", __name__,
                                    static_folder="static",
-                                   template_folder="templates")
+                                   template_folder="templates",
+                                   static_url_path="/myldapi/static")
 
         self.blueprint.add_url_rule("/object", "object", self.show_object)
         self.blueprint.add_url_rule("/", "home", self.show_home)

@@ -23,9 +23,7 @@ class WFSSource():
         url = self.query_for_id(id)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
-        items = tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
-        return items
-
+        return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
 
     def query_for_id(self, id):
         uri_template = self.endpoint + \
