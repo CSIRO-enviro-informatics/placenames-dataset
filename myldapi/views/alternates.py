@@ -17,5 +17,10 @@ class AlternatesView:
                          ])                        
         self.register = register
     
+    def get_attributes(self, uri):
+        """return a dictionary of object attributes"""
+        raise NotImplementedError('Must implement the get_attributes method')
+
     def get_graph(self, uri):
-        pass
+        """return a RDFLIB graph of the object"""
+        raise NotImplementedError('Must implement the get_graph method')

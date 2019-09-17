@@ -14,14 +14,16 @@ class WFSSource(Source):
 
     @lru_cache(maxsize=32)
     def get_object_details(self, uri):
+        results = []
         url = self.query_for_id(id)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         for am in self.attr_map:
             text = tree.xpath('//{}/text()'.format(am.wfs_attr), namespaces=tree.getroot().nsmap)
-            am.value = am.typefunc(text)
+            value = am.typefunc(text)
+            results.append((am, value))
 
-        return self.attr_map
+        return results
             
 
     @lru_cache(maxsize=1)

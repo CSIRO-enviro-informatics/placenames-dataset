@@ -12,7 +12,7 @@ CRS_OGC = Namespace("http://www.opengis.net/def/crs/OGC/1.3/")
 CRS_EPSG = Namespace("http://www.opengis.net/def/crs/EPSG/0/")
 QB4ST = Namespace("http://www.w3.org/ns/qb4st/")
 
-PACKAGE_NAME="myldapi"
+PACKAGE_NAME = "myldapi"
 
 DEFAULT_TEMPLATES = {
     "alternates": "{}/alternates.html".format(PACKAGE_NAME),
@@ -22,9 +22,11 @@ DEFAULT_TEMPLATES = {
     "rofr": "{}/registers.html".format(PACKAGE_NAME)
 }
 
+
 def id_from_uri(uri):
     base, objectId = uri.rsplit('/', 1)
     return objectId
+
 
 def base_from_uri(uri):
     base, objectId = uri.rsplit('/', 1)

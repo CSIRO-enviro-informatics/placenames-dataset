@@ -1,16 +1,30 @@
 import rdflib
 from .view import View
+from ..utils import id_from_uri, base_from_uri
+
 
 class SourceView(View):
     def __init__(self, name, comment, source):
         super().__init__(name, comment)
         self.source = source
-    
+
     def get_attributes(self, uri):
-        base, objectId = uri.rsplit('/', 1)
-        attr_mappings = self.source.get
+        attr_values = self.source.get_object_details(uri)
+        deets = {}
+        for am, val in attr_values:
+            deets[am.varname] = val
+        return deets
 
     def get_graph(self, uri):
-        base, objectId = uri.rsplit('/', 1)
-        self.source.
+        attr_values = self.source.get_object_details(uri)
+        g = rdflib.Graph()
+        g.bind('asgs', ASGS)
+        g.bind('geo', GEO)
+        g.bind('geox', GEOX)
+        g.bind('data', DATA)
 
+        for am, val in attr_values:
+            for p in am.predicates:                
+
+
+        return g
