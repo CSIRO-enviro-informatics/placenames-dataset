@@ -1,25 +1,38 @@
 import requests
 from lxml import etree
+from functools import lru_cache
+from .source import Source
 
 
-class WFSSource():
-    def __init__(self, endpoint, typename, id_prop, mapping):
+class WFSSource(Source):
+    def __init__(self, endpoint, typename, id_prop, ns_map, attr_map):
         self.endpoint = endpoint
-        self.mapping = mapping
+        self.ns_map = ns_map
+        self.attr_map = attr_map
         self.typename = typename
         self.id_prop = id_prop
 
-    def get_object_details(self, id):
+    @lru_cache(maxsize=32)
+    def get_object_details(self, uri):
         url = self.query_for_id(id)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
+        for am in self.attr_map:
+            text = tree.xpath('//{}/text()'.format(am.wfs_attr), namespaces=tree.getroot().nsmap)
+            am.value = am.typefunc(text)
 
+        return self.attr_map
+            
 
+    @lru_cache(maxsize=1)
     def get_count(self):
         # attempt dynamic, otherwise use fixed value
         pass
 
     def get_ids(self, startindex, count):
+        if startindex + count > self.get_count():
+            raise IndexError("Attempting to access more elements than exist")
+
         url = self.query_for_id(id)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree

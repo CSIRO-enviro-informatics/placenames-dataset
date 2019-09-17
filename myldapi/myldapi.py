@@ -1,5 +1,5 @@
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
-
+from .utils import DEFAULT_TEMPLATES
 
 class MyLDApi(object):
     def __init__(self, app=None, registers=[]):
@@ -30,9 +30,17 @@ class MyLDApi(object):
 
     def show_home(self):
         # Need to check headers, as this could be showing the reg-of-reg etc
-        return render_template("myldapi/home.html")
+        return render_template(DEFAULT_TEMPLATES.home)
 
-    def show_register(self):
+    def show_register(self, id=None):         
+        reg = register_for_path(request.endpoint)
+
+        view = request.args.get('_view')
+        format = request.args.get('_format')
+
+        request.headers.get('your-header-name')
+
+
         return render_template()
 
     # this function is here to allow linkdata.gov.au redirect to be cleaner
@@ -49,3 +57,6 @@ class MyLDApi(object):
 
     def register_for_uri(self, uri):
         return next((reg for reg in self.registers if reg.can_resolve_uri(uri)), None)
+
+    def register_for_path(self, path):
+        return next((reg for reg in self.registers if reg.path == path), None)

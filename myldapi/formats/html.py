@@ -1,12 +1,16 @@
-from format import
+import .format
+from flask import request, Response, render_template
 
 
-class HTML(Format):
+class HTMLFormat(Format):
     def __init__(self, template):
-        self.label = "HTML Formatter"
-        self.comment = "Provides a human readable HTML page."
-        self.mediaType = "text/html"
+        super().__init__("HTML Formatter", 
+                         "Provides a human readable HTML page.",
+                         "text/html",
+                         "html")
         self.template = template
 
-    def render(self, request, graph):
-        pass
+    def render_response(self, uri, view, request):
+        deets = view.get_attributes(uri)
+        return Response(render_template(self.template, *deets), mimetype=self.default_media_type())
+
