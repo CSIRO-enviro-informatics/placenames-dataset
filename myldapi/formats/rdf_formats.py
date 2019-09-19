@@ -1,4 +1,4 @@
-from .rdf_format import RDFBaseFormat
+from .rdf_base import RDFBaseFormat
 from flask import request, Response, render_template
 
 class TurtleFormat(RDFBaseFormat):

@@ -1,13 +1,31 @@
 {% extends "myldapi/layout.html" %}
 
 {% block content %}
-<h1>{{objectType}} {{ id }}</h1>
+<h1>{{ type_name }} {{ id }}</h1>
 <p><code>{{ uri }}</code></p>
 <dl>
-    {% for item in properties %}
-    <dt><a title="{{ item.title }}" href="{{ item.uri }}">{{ item.label }}</a></dt>
-    <dd>{{ item.value }}</dd>
-    {% endfor %}
+    {% for item, value in attr_map %}
+        {%if item.label or item.predicate.label %}
+            <dt>
+                {%if item.predicate.uri %}
+                    <a title="{{ item.predicate.comment }}" href="{{ item.predicate.uri }}">{{ item.predicate.label }}</a>
+                {% else %}
+                    {%if item.predicate.label %}
+                        {{ item.predicate.label }}
+                    {% else %}
+                        {{ item.label }}
+                    {% endif %}        
+                {% endif %}
+            </dt>
+            <dd>
+                {%if value.uri %}
+                    <a href="{{ value.uri }}">{{ value.label }}</a>
+                {% else %}
+                    {{ value.label }}
+                {% endif %}
+            </dd>
+            {% endif %}
+        {% endfor %}
 </dl>
 <p>
     Alternative views and formats for this resource:

@@ -4,16 +4,12 @@ from ..utils import id_from_uri, base_from_uri
 
 
 class SourceView(View):
-    def __init__(self, name, comment, source):
-        super().__init__(name, comment)
+    def __init__(self, name, comment, key, formats, source):
+        super().__init__(name, comment, key, formats)
         self.source = source
 
     def get_attributes(self, uri):
-        attr_values = self.source.get_object_details(uri)
-        deets = {}
-        for am, val in attr_values:
-            deets[am.varname] = val
-        return deets
+        return self.source.get_object_details(uri)
 
     def get_graph(self, uri):
         attr_values = self.source.get_object_details(uri)
@@ -24,7 +20,7 @@ class SourceView(View):
         g.bind('data', DATA)
 
         for am, val in attr_values:
-            for p in am.predicates:                
-
+            for p in am.predicates:    
+                pass            
 
         return g

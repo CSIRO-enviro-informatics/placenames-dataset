@@ -4,7 +4,7 @@ from ..formats import HTMLFormat, common_rdf_formats
 from ..utils import DEFAULT_TEMPLATES
 
 class AlternatesView:
-    def __init__(self, template=None):
+    def __init__(self, register, template=None):
         if template == None:
             template = DEFAULT_TEMPLATES.alternates
 

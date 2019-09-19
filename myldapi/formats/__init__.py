@@ -1,6 +1,7 @@
-from .rdf_formats import *
-from .format import *
-from .html import *
-from .rdf_base import *
+from .rdf_formats import TurtleFormat, RDFXMLFormat, JSONLDFormat, NTFormat, N3Format
+from .format import Format
+from .html import HTMLFormat
+from .rdf_base import RDFBaseFormat
+from .json import JSONFormat
 
 common_rdf_formats = [TurtleFormat(), RDFXMLFormat(), JSONLDFormat, NTFormat(), N3Format()]

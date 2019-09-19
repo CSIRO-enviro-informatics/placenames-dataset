@@ -1,11 +1,11 @@
 import logging
 from flask import Flask
-from myldapi import register, myldapi, wfs_source, attr_mapping
-from .asgs.meshblocks import Meshblock
+from asgs.meshblocks import Meshblock
+from myldapi import MyLDApi
 
 app = Flask(__name__)
 
-myapi = myldapi.MyLDApi(app, [
+myapi = MyLDApi(app, [
         Meshblock()
     ])
 
@@ -20,5 +20,3 @@ if __name__ == "__main__":
 
     # run the Flask app
     app.run(debug=conf.DEBUG, threaded=True, use_reloader=False)
-
-

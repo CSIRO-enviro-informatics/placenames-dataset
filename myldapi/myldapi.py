@@ -30,18 +30,29 @@ class MyLDApi(object):
 
     def show_home(self):
         # Need to check headers, as this could be showing the reg-of-reg etc
-        return render_template(DEFAULT_TEMPLATES.home)
+        return render_template(DEFAULT_TEMPLATES['home'])
 
-    def show_register(self, id=None):         
-        reg = register_for_path(request.endpoint)
+    def show_register(self, id=None):        
+        reg_path = request.endpoint.split(".", 1)[1]
+        register = self.register_for_path(reg_path)
 
-        view = request.args.get('_view')
-        format = request.args.get('_format')
+        view_key = request.args.get('_view')
+        format_key = request.args.get('_format')
 
-        request.headers.get('your-header-name')
+        view = register.get_view(view_key) if view_key else register.get_default_view()
+        if view == None:
+            raise NotImplementedError("No view exists of type '{}' on the requested object".format(view_key))
 
+        format = view.get_format(format_key) if format_key else view.get_default_format()
+        if format == None:
+            raise NotImplementedError("No format exists of type '{}' on the requested view".format(format_key))
 
-        return render_template()
+        if id:
+            uri = register.get_uri_for(id)
+        else:
+            raise NotImplementedError("Need to render the register itself")
+
+        return format.render_response(uri, view, register, request)
 
     # this function is here to allow linkdata.gov.au redirect to be cleaner
     def show_object(self):

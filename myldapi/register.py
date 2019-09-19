@@ -9,7 +9,7 @@ class Register:
         self.type_uri = type_uri
         self.views = views
 
-        if not isinstance(view, list):
+        if not isinstance(views, list):
             self.views = [views]
 
         # if self.base_uri[-1] == "/":
@@ -21,17 +21,28 @@ class Register:
         return self.get_graph_for_id(objectId)
 
     def get_graph_for_id(self, id, view=None):
-        raise NotImplementedError('Must implement the get_graph_for_id method')
+        if view == None:
+            view = self.get_default_view
+        return view.get_graph()
 
-    def create_list(self, uri, page, page_size):
-        return []
+    def get_label_for(id):
+        return str(id)
+
+    def list_uris(self, page=0, page_size=20):
+        raise NotImplementedError('Must implement the get_ids method')
 
     def can_resolve_uri(self, uri):
         base = base_from_uri(uri)
         return base == self.base_uri
 
     def get_uri_for(self, id):
-        return os.path.join(self.get_base_uri, id)
+        return os.path.join(self.base_uri, id)
 
-    def set_group(self, group):
-        self.group = group
+    def get_count(self):
+        raise NotImplementedError('Must implement the get_count method')
+
+    def get_default_view(self):
+        return self.views[0]
+
+    def get_view(self, key):
+        return next((v for v in self.views if v.key == key), None)
