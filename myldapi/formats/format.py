@@ -15,5 +15,5 @@ class Format:
     def default_media_type(self):
         return self.media_types[0]
 
-    def render_response(self, uri, view, register, request):
+    def render_response(self, uri, view, register, request, **kwargs):
         raise NotImplementedError('Must implement the render_response method')

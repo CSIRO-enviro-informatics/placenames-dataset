@@ -11,11 +11,11 @@ class AttributeMapping:
         self.units = units
 
     def create_value(self, val):        
-        typed_val = self.typefunc(val)
+        typed_val = self.typefunc(val) if self.typefunc else val
         if self.converter:
             return self.converter(typed_val)
         else:
-            return AttributeMappingValue(str(typed_val))
+            return AttributeMappingValue(typed_val, str(typed_val))
 
     @staticmethod
     def reg_id_converter(register_cls, *args, **kwargs):
@@ -24,7 +24,7 @@ class AttributeMapping:
             reg = register_cls(*args, **kwargs)
             uri = reg.get_uri_for(id)
             label = reg.get_label_for(id)
-            return AttributeMappingValue(label, uri)
+            return AttributeMappingValue(value, label, uri)
 
         return converter
             
@@ -32,11 +32,12 @@ class AttributeMapping:
     def format_converter(template):
         def converter(value):
             formatted = template.format(value)
-            return AttributeMappingValue(formatted)
+            return AttributeMappingValue(value, formatted)
         return converter
 
 class AttributeMappingValue:
-    def __init__(self, label, uri=None):
+    def __init__(self, value, label, uri=None):
+        self.value = value
         self.label = label
         self.uri = uri
 

@@ -8,10 +8,10 @@ class SourceView(View):
         super().__init__(name, comment, key, formats)
         self.source = source
 
-    def get_attributes(self, uri):
+    def get_attributes(self, uri, **kwargs):
         return self.source.get_object_details(uri)
 
-    def get_graph(self, uri):
+    def get_graph(self, uri, **kwargs):
         attr_values = self.source.get_object_details(uri)
         g = rdflib.Graph()
         g.bind('asgs', ASGS)

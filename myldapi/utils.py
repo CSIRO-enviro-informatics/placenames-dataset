@@ -22,6 +22,8 @@ DEFAULT_TEMPLATE_OBJECT = "{}/object.html".format(PACKAGE_NAME)
 DEFAULT_TEMPLATE_REGISTER = "{}/register.html".format(PACKAGE_NAME)
 DEFAULT_TEMPLATE_ROFR = "{}/registers.html".format(PACKAGE_NAME)
 
+DEFAULT_PAGE_SIZE = 20
+
 def id_from_uri(uri):
     base, objectId = uri.rsplit('/', 1)
     return objectId

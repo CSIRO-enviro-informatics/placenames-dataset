@@ -60,8 +60,8 @@ class Meshblock(Register):
                          ])    
 
 
-    def list_uris(self, page=0, page_size=20):
-        ids = self.source.get_ids(page, size)
+    def list_uris(self, page=0, per_page=20):
+        ids = self.source.get_ids(page*per_page, per_page)
         return [get_uri_for(id) for id in ids]
 
     def get_count(self):

@@ -22,13 +22,13 @@ class Register:
 
     def get_graph_for_id(self, id, view=None):
         if view == None:
-            view = self.get_default_view
+            view = self.get_default_view()
         return view.get_graph()
 
     def get_label_for(id):
         return str(id)
 
-    def list_uris(self, page=0, page_size=20):
+    def list_uris(self, page=0, per_page=20):
         raise NotImplementedError('Must implement the get_ids method')
 
     def can_resolve_uri(self, uri):
@@ -46,3 +46,6 @@ class Register:
 
     def get_view(self, key):
         return next((v for v in self.views if v.key == key), None)
+
+    def get_reg_endpoint(self):
+        return f"{self.path}/reg"

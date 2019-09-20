@@ -10,11 +10,11 @@ class View:
         if not isinstance(formats, list):
             self.formats = [formats]
     
-    def get_attributes(self, uri):
+    def get_attributes(self, uri, **kwargs):
         """return a dictionary of object attributes"""
         raise NotImplementedError('Must implement the get_attributes method')
 
-    def get_graph(self, uri):
+    def get_graph(self, uri, **kwargs):
         """return a RDFLIB graph of the object"""
         raise NotImplementedError('Must implement the get_graph method')
 

@@ -10,7 +10,7 @@ class AlternatesView:
 
         super().__init__(name="Alternates View", 
                          comment="The view that lists all other views",
-                         namespace="https://promsns.org/def/alt",
+                         key="alternates",
                          formats=[
                              HTMLFormat(template),
                              *common_rdf_formats
@@ -18,9 +18,10 @@ class AlternatesView:
         self.register = register
     
     def get_attributes(self, uri):
-        """return a dictionary of object attributes"""
-        raise NotImplementedError('Must implement the get_attributes method')
+        attr_pairings = []
 
+        return attr_pairings
+        
     def get_graph(self, uri):
         """return a RDFLIB graph of the object"""
         raise NotImplementedError('Must implement the get_graph method')

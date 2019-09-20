@@ -1,5 +1,7 @@
+import os
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
 from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT
+from .rofr import RegisterOfRegisters
 
 class MyLDApi(object):
     def __init__(self, app=None, registers=[]):
@@ -10,8 +12,12 @@ class MyLDApi(object):
 
     def init_app(self, app):
         app.config.setdefault("APP_TITLE", "LDAPI Instance")
-        app.config.setdefault("DATASET_NAME", "Unknown")
+        app.config.setdefault("DATASET_NAME", "MyLDAPI Example")
+        app.config.setdefault("DATASET_URI", "http://linked.data.com/dataset/myldapiexample")
         app.config.setdefault("CITATION_TEMPLATE", "{type} {id}. {type} from the {dataset}. {uri}")
+
+        self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.registers)        
+        self.registers.append(self.rofr)
 
         self.blueprint = Blueprint("myldapi", __name__,
                                    static_folder="static",
@@ -19,14 +25,14 @@ class MyLDApi(object):
                                    static_url_path="/myldapi/static")
 
         self.blueprint.add_url_rule("/object", "object", self.show_object)
-        self.blueprint.add_url_rule("/", "home", self.show_home)
+        # self.blueprint.add_url_rule("/", "home", self.show_home)
         self.blueprint.add_url_rule("/about", "about", self.show_about)
 
         for reg in self.registers:
-            self.blueprint.add_url_rule(
-                "/{}/<id>".format(reg.path), reg.path, self.show_register)
-            self.blueprint.add_url_rule(
-                "/{}".format(reg.path), reg.path, self.show_register)
+            self.blueprint.add_url_rule(os.path.join("/",reg.path,"<id>"), reg.path, self.show_register_object)
+            
+        self.blueprint.add_url_rule(os.path.join("/",reg.path), "home", self.show_home)
+        # self.blueprint.add_url_rule(os.path.join("/",reg.path), self.rofr.get_reg_endpoint(), self.show_rofr)
 
         app.register_blueprint(self.blueprint)
 
@@ -37,7 +43,7 @@ class MyLDApi(object):
     def show_about(self):
         return render_template(DEFAULT_TEMPLATE_ABOUT)
 
-    def show_register(self, id=None):        
+    def show_register_object(self, id):        
         reg_path = request.endpoint.split(".", 1)[1]
         register = self.register_for_path(reg_path)
 
@@ -52,10 +58,26 @@ class MyLDApi(object):
         if format == None:
             raise NotImplementedError("No format exists of type '{}' on the requested view".format(format_key))
 
-        if id:
-            uri = register.get_uri_for(id)
-        else:
-            raise NotImplementedError("Need to render the register itself")
+        uri = register.get_uri_for(id)
+
+        return format.render_response(uri, view, register, request)
+
+    def show_rofr(self, id):        
+        reg_path = request.endpoint.split(".", 1)[1]
+        register = self.register_for_path(reg_path)
+
+        view_key = request.args.get('_view')
+        format_key = request.args.get('_format')
+
+        view = register.get_view(view_key) if view_key else register.get_default_view()
+        if view == None:
+            raise NotImplementedError("No view exists of type '{}' on the requested object".format(view_key))
+
+        format = view.get_format(format_key) if format_key else view.get_default_format()
+        if format == None:
+            raise NotImplementedError("No format exists of type '{}' on the requested view".format(format_key))
+
+        uri = register.get_uri_for(id)
 
         return format.render_response(uri, view, register, request)
 

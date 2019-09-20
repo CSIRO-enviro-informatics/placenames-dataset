@@ -7,7 +7,7 @@ class RDFBaseFormat(Format):
         super().__init__(label, comment, media_types, extensions=extensions)
         self.rdflib_format = rdflib_format
 
-    def render_response(self, uri, view, register, request):
+    def render_response(self, uri, view, register, request, **kwargs):
         graph = view.get_graph(uri)
         response_text = graph.serialize(format=self.rdflib_format)
 
