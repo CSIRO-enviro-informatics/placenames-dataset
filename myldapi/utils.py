@@ -15,13 +15,12 @@ RDF_a = RDF.term('type')
 
 PACKAGE_NAME = "myldapi"
 
-DEFAULT_TEMPLATES = {
-    "alternates": "{}/alternates.html".format(PACKAGE_NAME),
-    "home": "{}/home.html".format(PACKAGE_NAME),
-    "object": "{}/object.html".format(PACKAGE_NAME),
-    "register": "{}/register.html".format(PACKAGE_NAME),
-    "rofr": "{}/registers.html".format(PACKAGE_NAME)
-}
+DEFAULT_TEMPLATE_HOME = "{}/home.html".format(PACKAGE_NAME)
+DEFAULT_TEMPLATE_ABOUT = "{}/about.html".format(PACKAGE_NAME)
+DEFAULT_TEMPLATE_ALTERNATES = "{}/alternates.html".format(PACKAGE_NAME)
+DEFAULT_TEMPLATE_OBJECT = "{}/object.html".format(PACKAGE_NAME)
+DEFAULT_TEMPLATE_REGISTER = "{}/register.html".format(PACKAGE_NAME)
+DEFAULT_TEMPLATE_ROFR = "{}/registers.html".format(PACKAGE_NAME)
 
 def id_from_uri(uri):
     base, objectId = uri.rsplit('/', 1)

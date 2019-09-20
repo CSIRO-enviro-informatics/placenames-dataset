@@ -1,36 +1,72 @@
 {% extends "myldapi/layout.html" %}
 
 {% block content %}
-<h1>{{ type_name }} {{ id }}</h1>
-<p><code>{{ uri }}</code></p>
-<dl>
-    {% for item, value in attr_map %}
-        {%if item.label or item.predicate.label %}
-            <dt>
-                {%if item.predicate.uri %}
-                    <a title="{{ item.predicate.comment }}" href="{{ item.predicate.uri }}">{{ item.predicate.label }}</a>
-                {% else %}
-                    {%if item.predicate.label %}
-                        {{ item.predicate.label }}
-                    {% else %}
-                        {{ item.label }}
-                    {% endif %}        
-                {% endif %}
-            </dt>
-            <dd>
-                {%if value.uri %}
-                    <a href="{{ value.uri }}">{{ value.label }}</a>
-                {% else %}
-                    {{ value.label }}
-                {% endif %}
-            </dd>
+<section class="myldapi-section">
+    <div class="row">
+        <div class="col-12">
+            <h1>{{ type_name }} {{ id }}</h1>
+            <p class="lead">{{ uri }}</p>
+        </div>
+    </div>
+    {%if geometry %}
+    <!-- if geometry is passed, show a map of it -->
+    <div class="row">
+        <div class="col-12">
+            <div id="map">Show a map of 'geometry'</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- <div class="col-12">
+            <h3>Attributes</h3>
+        </div> -->
+        {% for item, value in attr_map %}
+        {% if item.label or item.predicate.label %}
+        <dt class="col-sm-3">
+            {% if item.predicate.uri %}
+            <a title="{{ item.predicate.comment }}" href="{{ item.predicate.uri }}">{{ item.predicate.label }}</a>
+            {% else %}
+            {% if item.predicate.label %}
+            {{ item.predicate.label }}
+            {% else %}
+            {{ item.label }}
             {% endif %}
+            {% endif %}
+        </dt>
+        <dd class="col-sm-9">
+            {% if value.uri %}
+            <a href="{{ value.uri }}">{{ value.label }}</a>
+            {% else %}
+            {{ value.label }}
+            {% endif %}
+        </dd>
+        {% endif %}
         {% endfor %}
-</dl>
-<p>
-    Alternative views and formats for this resource:
-</p>
-<ul>
-    <li><a href="?_view=alternates">Alternate Views</a></li>
-</ul>
+    </div>
+</section>
+
+<section class="myldapi-section">
+    <div class="row">
+        <div class="col-12">
+            <h3>Other Views</h3>
+            <p>Other views/representations/profiles of this object can be found in the <a href="?_view=alternates&_format=text/html">alternates view</a></p>
+        </div>
+    </div>
+</section>
+
+<section class="myldapi-section">
+    <div class="row">
+        <div class="col-12">
+            <h3>Citation</h3>
+            <p>If you wish to cite this Catchment as you would a publication, please use the following format:</p>
+            <blockquote class="blockquote citation">
+                <p class="ml-0">
+                    {{config.CITATION_TEMPLATE.format(type=type_name, id=id, uri=uri, dataset=config.DATASET_NAME)}}
+                </p>
+            </blockquote>
+        </div>
+    </div>
+</section>
+
 {% endblock %}

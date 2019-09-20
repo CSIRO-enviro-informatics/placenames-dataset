@@ -1,0 +1,15 @@
+body {
+    padding-top: 120px
+}
+
+.myldapi-section {
+    padding-bottom: 2rem ;
+}
+
+.citation {
+    margin-bottom: 1rem;
+    margin-left: 3rem;
+    font-size: 1.2rem;
+    font-family: monospace;    
+}
+

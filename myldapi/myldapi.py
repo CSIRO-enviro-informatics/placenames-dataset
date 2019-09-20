@@ -1,5 +1,5 @@
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
-from .utils import DEFAULT_TEMPLATES
+from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT
 
 class MyLDApi(object):
     def __init__(self, app=None, registers=[]):
@@ -9,9 +9,10 @@ class MyLDApi(object):
             self.init_app(app)
 
     def init_app(self, app):
-        app.config.setdefault('APP_TITLE', 'LDAPI Instance')
+        app.config.setdefault("APP_TITLE", "LDAPI Instance")
+        app.config.setdefault("DATASET_NAME", "Unknown")
+        app.config.setdefault("CITATION_TEMPLATE", "{type} {id}. {type} from the {dataset}. {uri}")
 
-        # create a blueprint and attach it to the app?
         self.blueprint = Blueprint("myldapi", __name__,
                                    static_folder="static",
                                    template_folder="templates",
@@ -19,6 +20,7 @@ class MyLDApi(object):
 
         self.blueprint.add_url_rule("/object", "object", self.show_object)
         self.blueprint.add_url_rule("/", "home", self.show_home)
+        self.blueprint.add_url_rule("/about", "about", self.show_about)
 
         for reg in self.registers:
             self.blueprint.add_url_rule(
@@ -30,7 +32,10 @@ class MyLDApi(object):
 
     def show_home(self):
         # Need to check headers, as this could be showing the reg-of-reg etc
-        return render_template(DEFAULT_TEMPLATES['home'])
+        return render_template(DEFAULT_TEMPLATE_HOME)
+
+    def show_about(self):
+        return render_template(DEFAULT_TEMPLATE_ABOUT)
 
     def show_register(self, id=None):        
         reg_path = request.endpoint.split(".", 1)[1]
