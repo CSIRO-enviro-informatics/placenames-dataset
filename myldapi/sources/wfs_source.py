@@ -39,16 +39,30 @@ class WFSSource(Source):
     def get_count(self):
         if self.count:
             return self.count
-        raise NotImplemented("Must provide a way to access the count from the WFS")
+
+        raise NotImplemented("No way to get dynamic count yet, must set count manually")
+        # url = self.query_for_count()
+        # resp = requests.get(url)
+        # tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
+        # return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
 
     def get_ids(self, startindex, count):
         if startindex + count > self.get_count():
             raise IndexError("Attempting to access more elements than exist")
 
-        url = self.query_for_id(id)
+        url = self.query_for_ids(startindex, count)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
+
+    # def query_for_count(self):
+    #     uri_template = self.endpoint +\
+    #         '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
+    #         '&propertyName={self.id_prop}' \
+    #         '&resultType=hits'
+    #     url = uri_template.format(**vars(self), **locals())
+    #     print(url)
+    #     return url
 
     def query_for_id(self, id):
         uri_template = self.endpoint + \
@@ -61,11 +75,12 @@ class WFSSource(Source):
             '</ogc:Filter>'
         return uri_template.format(**vars(self), **locals())
 
-    def query_for_ids(self, startindex, count):
+    def query_for_ids(self, startindex, take_count):
         #get value for paging the registry
         uri_template = self.endpoint +\
             '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
             '&propertyName={self.id_prop}' \
-            '&sortBy={self.id_prop}&startIndex={startindex}&count={count}'
+            '&sortBy={self.id_prop}&startIndex={startindex}&count={take_count}'
 
         return uri_template.format(**vars(self), **locals())
+

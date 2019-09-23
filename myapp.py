@@ -1,9 +1,11 @@
 import logging
 from flask import Flask
 from asgs.meshblocks import Meshblock
+import asgs.config
 from myldapi import MyLDApi
 
 app = Flask(__name__)
+app.config.from_object(asgs.config)
 
 myapi = MyLDApi(app, [
         Meshblock()

@@ -31,3 +31,7 @@ def id_from_uri(uri):
 def base_from_uri(uri):
     base, objectId = uri.rsplit('/', 1)
     return base
+
+def check_config(name, app):
+    if not name in app.config:
+        raise ValueError(f"{name} must be set in the config pre-initialistaion of {PACKAGE_NAME}")

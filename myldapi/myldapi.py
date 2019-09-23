@@ -1,6 +1,6 @@
 import os
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
-from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT
+from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, PACKAGE_NAME
 from .rofr import RegisterOfRegisters
 
 class MyLDApi(object):
@@ -11,18 +11,19 @@ class MyLDApi(object):
             self.init_app(app)
 
     def init_app(self, app):
-        app.config.setdefault("APP_TITLE", "LDAPI Instance")
-        app.config.setdefault("DATASET_NAME", "MyLDAPI Example")
-        app.config.setdefault("DATASET_URI", "http://linked.data.com/dataset/myldapiexample")
+        check_config('APP_TITLE', app)
+        # Not sure DATASET_NAME is a good config var. I would like to tie it to RofR maybe? but gets used in citation stuff
+        check_config('DATASET_NAME', app)
+        check_config('DATASET_URI', app)
         app.config.setdefault("CITATION_TEMPLATE", "{type} {id}. {type} from the {dataset}. {uri}")
 
-        self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.registers)        
+        self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.registers[:])        
         self.registers.append(self.rofr)
 
-        self.blueprint = Blueprint("myldapi", __name__,
+        self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
                                    template_folder="templates",
-                                   static_url_path="/myldapi/static")
+                                   static_url_path=f"/{PACKAGE_NAME}/static")
 
         self.blueprint.add_url_rule("/object", "object", self.show_object)
         # self.blueprint.add_url_rule("/", "home", self.show_home)

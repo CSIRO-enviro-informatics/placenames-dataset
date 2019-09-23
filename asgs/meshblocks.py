@@ -1,7 +1,7 @@
 from .asgs_view import ASGSView
 from myldapi import Register, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
-from .common import ASGS
+from .config import ASGS, DATASET_URI, MESHBLOCK_COUNT
 
 class Meshblock(Register):
     def __init__(self):            
@@ -49,12 +49,13 @@ class Meshblock(Register):
             ns_map={
                 "MB": "WFS"
             },
+            count=MESHBLOCK_COUNT,
             attr_map=self.attribute_mappings)
 
         super().__init__(name = "Meshblock",
                          path = "meshblock",
                          type_uri = "http://linked.data.gov.au/def/asgs#MeshBlock",
-                         base_uri = "http://linked.data.gov.au/dataset/asgs2016/meshblock/",
+                         base_uri = f"{DATASET_URI}/meshblock",
                          views=[
                              ASGSView(self.source)
                          ])    
@@ -62,7 +63,7 @@ class Meshblock(Register):
 
     def list_uris(self, page=0, per_page=20):
         ids = self.source.get_ids(page*per_page, per_page)
-        return [get_uri_for(id) for id in ids]
+        return [self.get_uri_for(id) for id in ids]
 
     def get_count(self):
         return self.source.get_count()

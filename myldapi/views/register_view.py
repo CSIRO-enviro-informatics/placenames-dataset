@@ -28,7 +28,7 @@ class RegisterView(View):
         page_uris = register.list_uris(page, per_page)
 
         list_mapping = AttributeMapping("uris", f"List of {register.name}", typefunc=list)
-        values = [AttributeMappingValue(uri, register.get_label_for(label), uri) for uri in page_uris]
+        values = [AttributeMappingValue(uri, register.get_label_for(uri), uri) for uri in page_uris]
         
         list_mapping_value = AttributeMappingValue(values, None)
 

@@ -21,7 +21,9 @@ class RegisterOfRegisters(Register):
                          )
 
     def get_label_for(id):
-        return str(id)
+        uri = self.get_uri_for(id)
+        register = next((reg for reg in self.registers if reg.base_uri == uri), None)
+        return f"Register of {register.name}"
 
     def list_uris(self, page=0, per_page=20):
         reg_uris = [r.base_uri for r in self.registers]
