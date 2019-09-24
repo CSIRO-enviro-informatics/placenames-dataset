@@ -7,7 +7,7 @@ from ..attr_mapping import AttributeMapping, AttributeMappingPredicate as Pred, 
 
 
 class RegisterView(View):
-    def __init__(self, registers, template=None):
+    def __init__(self, register, template=None):
         if template == None:
             template = DEFAULT_TEMPLATE_REGISTER
 
@@ -18,14 +18,12 @@ class RegisterView(View):
                              HTMLFormat(template),
                              *common_rdf_formats
                          ])        
-        self.registers = registers
+        self.register = register
 
     def get_attributes(self, uri, **kwargs):
         page, per_page = self.get_page_args(**kwargs)
         
-        register = next((reg for reg in self.registers if reg.base_uri == uri), None)
-
-        page_uris = register.list_uris(page, per_page)
+        page_uris = self.register.get_item_uris(page, per_page)
 
         list_mapping = AttributeMapping("uris", f"List of {register.name}", typefunc=list)
         values = [AttributeMappingValue(uri, register.get_label_for(uri), uri) for uri in page_uris]

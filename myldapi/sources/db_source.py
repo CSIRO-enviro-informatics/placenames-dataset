@@ -9,14 +9,17 @@ class DBSource(Source):
         """Init database parameter for the given object"""
         raise NotImplementedError('Must implement the __init__ method')
 
+    @abstractmethod
     def get_object_details(self, uri):
         """return a list of (AttributeMapping, value) tuples populated with their values"""
-        raise NotImplementedError('Must implement the get_object_details method')
+        pass
 
+    @abstractmethod
     def get_count():
         """The count of total objects in this source"""
-        raise NotImplementedError('Must implement the get_count method')
+        pass
 
-    def get_ids(self, startindex, count):
+    @abstractmethod
+    def get_ids(self, page, per_page):
         """Get a list of ids from the source"""
-        raise NotImplementedError('Must implement the get_ids method')
+        pass

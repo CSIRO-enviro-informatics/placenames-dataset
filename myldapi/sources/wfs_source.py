@@ -7,8 +7,8 @@ from ..utils import id_from_uri
 
 
 class WFSSource(Source):
-    def __init__(self, endpoint, typename, id_prop, ns_map, attr_map, count=None):
-        self.endpoint = endpoint
+    def __init__(self, wfs_endpoint, typename, id_prop, ns_map, attr_map, count=None):
+        self.wfs_endpoint = wfs_endpoint
         self.ns_map = ns_map
         self.attr_map = attr_map
         self.typename = typename
@@ -34,7 +34,6 @@ class WFSSource(Source):
 
         return attr_pairings
             
-
     @lru_cache(maxsize=1)
     def get_count(self):
         if self.count:
@@ -46,17 +45,18 @@ class WFSSource(Source):
         # tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         # return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
 
-    def get_ids(self, startindex, count):
-        if startindex + count > self.get_count():
+    def get_ids(self, page, per_page):
+        startindex = page * per_page
+        if startindex + per_page > self.get_count():
             raise IndexError("Attempting to access more elements than exist")
 
-        url = self.query_for_ids(startindex, count)
+        url = self.query_for_ids(startindex, per_page)
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
 
     # def query_for_count(self):
-    #     uri_template = self.endpoint +\
+    #     uri_template = self.wfs_endpoint +\
     #         '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
     #         '&propertyName={self.id_prop}' \
     #         '&resultType=hits'
@@ -65,7 +65,7 @@ class WFSSource(Source):
     #     return url
 
     def query_for_id(self, id):
-        uri_template = self.endpoint + \
+        uri_template = self.wfs_endpoint + \
             '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
             '&Filter=<ogc:Filter>' \
                 '<ogc:PropertyIsEqualTo>' \
@@ -77,7 +77,7 @@ class WFSSource(Source):
 
     def query_for_ids(self, startindex, take_count):
         #get value for paging the registry
-        uri_template = self.endpoint +\
+        uri_template = self.wfs_endpoint +\
             '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
             '&propertyName={self.id_prop}' \
             '&sortBy={self.id_prop}&startIndex={startindex}&count={take_count}'

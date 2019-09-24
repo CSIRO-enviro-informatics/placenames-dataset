@@ -4,9 +4,9 @@ from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, 
 from .rofr import RegisterOfRegisters
 
 class MyLDApi(object):
-    def __init__(self, app=None, registers=[]):
+    def __init__(self, app=None, objects=[]):
         self.app = app
-        self.registers = registers
+        self.objects = objects
         if app is not None:
             self.init_app(app)
 
@@ -17,8 +17,8 @@ class MyLDApi(object):
         check_config('DATASET_URI', app)
         app.config.setdefault("CITATION_TEMPLATE", "{type} {id}. {type} from the {dataset}. {uri}")
 
-        self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.registers[:])        
-        self.registers.append(self.rofr)
+        # self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.objects[:])        
+        self.objects.append(self.rofr)
 
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
@@ -29,10 +29,10 @@ class MyLDApi(object):
         # self.blueprint.add_url_rule("/", "home", self.show_home)
         self.blueprint.add_url_rule("/about", "about", self.show_about)
 
-        for reg in self.registers:
-            self.blueprint.add_url_rule(os.path.join("/",reg.path,"<id>"), reg.path, self.show_register_object)
+        for reg in self.objects:
+            self.blueprint.add_url_rule(os.path.join("/", reg.path, "<id>"), reg.path, self.show_register_object)
             
-        self.blueprint.add_url_rule(os.path.join("/",reg.path), "home", self.show_home)
+        # self.blueprint.add_url_rule(os.path.join("/",reg.path), "home", self.show_home)
         # self.blueprint.add_url_rule(os.path.join("/",reg.path), self.rofr.get_reg_endpoint(), self.show_rofr)
 
         app.register_blueprint(self.blueprint)
@@ -95,7 +95,7 @@ class MyLDApi(object):
             # show an error
 
     def register_for_uri(self, uri):
-        return next((reg for reg in self.registers if reg.can_resolve_uri(uri)), None)
+        return next((reg for reg in self.objects if reg.can_resolve_uri(uri)), None)
 
     def register_for_path(self, path):
-        return next((reg for reg in self.registers if reg.path == path), None)
+        return next((reg for reg in self.objects if reg.path == path), None)

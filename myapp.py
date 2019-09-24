@@ -1,6 +1,6 @@
 import logging
 from flask import Flask
-from asgs.meshblocks import Meshblock
+from asgs.meshblocks import Meshblock, MeshblockRegister
 import asgs.config
 from myldapi import MyLDApi
 

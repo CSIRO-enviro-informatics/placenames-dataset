@@ -9,7 +9,7 @@ class JSONFormat(Format):
                          "application/json",
                          "json")
 
-    def render_response(self, uri, view, register, request, **kwargs):
+    def render_response(self, uri, view, object, request, **kwargs):
         deets = view.get_attributes(uri)
         return Response(json.dumps(deets, indent=4), mimetype=self.default_media_type())
 

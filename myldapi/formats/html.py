@@ -11,17 +11,14 @@ class HTMLFormat(Format):
                          "html")
         self.template = template
 
-    def render_response(self, uri, view, register, request, **kwargs):
-        props = view.get_attributes(uri, **kwargs)        
+    def render_response(self, uri, view, obj, request, **kwargs):
+        attr_map = view.get_attributes(uri, **kwargs)        
         html_vars = {
             "uri": uri,
             "id": id_from_uri(uri),
-            "base_uri": base_from_uri(uri),
-            "type_uri": register.type_uri,
-            "type_name": register.name,
             "view": view,
-            "register": register,
-            "attr_map": props
+            "obj": obj,
+            "attr_map": attr_map
         }
         
         html_vars.update(kwargs)

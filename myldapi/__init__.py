@@ -4,6 +4,6 @@
 # import .utils
 
 from .myldapi import MyLDApi
-from .register import Register
+from .object import Object
 from .attr_mapping import AttributeMapping, AttributeMappingValue, AttributeMappingPredicate
 from .rofr import RegisterOfRegisters
