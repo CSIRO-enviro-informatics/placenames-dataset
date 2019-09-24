@@ -49,6 +49,6 @@ class RegisterView(View):
         raise NotImplementedError('Must implement the get_graph method')
 
     def get_page_args(self, **kwargs):
-        page = kwargs['page'] if 'page' in kwargs else 0
+        page = kwargs['page'] if 'page' in kwargs else 1
         per_page = kwargs['per_page'] if 'per_page' in kwargs else DEFAULT_PAGE_SIZE
         return page, per_page

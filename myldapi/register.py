@@ -29,7 +29,7 @@ class Register:
     def get_label_for(self, id):
         return str(id)
 
-    def list_uris(self, page=0, per_page=20):
+    def list_uris(self, page=1, per_page=20):
         raise NotImplementedError('Must implement the get_ids method')
 
     def can_resolve_uri(self, uri):
