@@ -35,3 +35,6 @@ def base_from_uri(uri):
 def check_config(name, app):
     if not name in app.config:
         raise ValueError(f"{name} must be set in the config pre-initialistaion of {PACKAGE_NAME}")
+
+def find_prop(pairs, varname):
+    return next(((am, v) for am, v in pairs if am.varname == varname), None)

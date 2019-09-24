@@ -1,7 +1,7 @@
 import rdflib
 from .view import View
 from ..formats import HTMLFormat, common_rdf_formats
-from ..utils import DEFAULT_TEMPLATE_REGISTER, DEFAULT_PAGE_SIZE
+from ..utils import DEFAULT_TEMPLATE_REGISTER, DEFAULT_PAGE_SIZE, id_from_uri
 from ..register import Register
 from ..attr_mapping import AttributeMapping, AttributeMappingPredicate as Pred, AttributeMappingValue
 
@@ -29,7 +29,7 @@ class RegisterView(View):
         page_uris = register.list_uris(page, per_page)
 
         list_mapping = AttributeMapping("uris", f"List of {register.type_name}", typefunc=list)
-        values = [AttributeMappingValue(uri, register.get_label_for(uri), uri) for uri in page_uris]
+        values = [AttributeMappingValue(uri, register.get_label_for(id_from_uri(uri)), uri) for uri in page_uris]
         
         list_mapping_value = AttributeMappingValue(values, None)
 

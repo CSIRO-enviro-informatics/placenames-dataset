@@ -1,6 +1,6 @@
 from .format import Format
 from flask import request, Response, render_template
-from ..utils import id_from_uri, base_from_uri
+from ..utils import id_from_uri, base_from_uri, find_prop
 from flask_paginate import Pagination
 
 class HTMLFormat(Format):
@@ -23,6 +23,7 @@ class HTMLFormat(Format):
             "view": view,
             "parent_register": parent_register,
             "attr_map": props,
+            "find_prop": find_prop
         }
         html_vars.update(kwargs)
 

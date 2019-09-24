@@ -74,7 +74,7 @@ class MyLDApi(object):
         per_page = request.args.get('per_page')
         extras = {
             "page": int(page) if page else 1,
-            "per_page": int(per_page) if per_page else 100
+            "per_page": int(per_page) if per_page else 20
         }
 
         return format.render_response(uri, view, register, request, **extras)

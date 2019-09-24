@@ -21,7 +21,7 @@ class RegisterOfRegisters(Register):
                          views=views
                          )
 
-    def get_label_for(id):
+    def get_label_for(self, id):
         uri = self.get_uri_for(id)
         register = next((reg for reg in self.registers if reg.base_uri == uri), None)
         return register.name # f"Register of {register.type_name}"
