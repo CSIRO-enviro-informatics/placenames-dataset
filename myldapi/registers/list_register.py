@@ -22,3 +22,10 @@ class ListRegister(Object):
 
     def get_count(self):
         return len(self.uri_list)
+
+    def contains(self, uri):
+        return uri in self.uri_list
+
+    @abstractmethod
+    def get_object(self, uri):
+        pass

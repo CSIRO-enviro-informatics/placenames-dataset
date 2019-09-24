@@ -28,3 +28,10 @@ class Register(Object):
     @abstractmethod
     def get_object(self, uri):
         pass
+
+    @abstractmethod
+    def contains(self, uri):
+        pass
+
+    def __contains__(self, uri):
+        return self.contains(uri)

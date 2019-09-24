@@ -1,15 +1,14 @@
 import os
 from ..utils import id_from_uri, base_from_uri
-from ..object import Object
+from .register import Register
 from abc import ABC, abstractmethod
 import inspect
 
-class SourceRegister(Object):
-    def __init__(self, uri, item_type, source, base_uri, path):
+class SourceRegister(Register):
+    def __init__(self, uri, source, item_type, base_uri, path):
         super().__init__(uri=uri, 
-                         type_uri="http://purl.org/linked-data/registry#Register",
-                         path=path):
-        self.item_type = item_type
+                         path=path,
+                         item_type=item_type):
         self.source = source
         self.base_uri = base_uri
 
@@ -32,3 +31,8 @@ class SourceRegister(Object):
 
     def get_object(self, uri):
         return self.class_type(uri)
+
+    def contains(self, uri):
+        id = id_from_uri(uri)
+        base_uri = base_from_uri(uri)
+        return self.base_uri == base_uri

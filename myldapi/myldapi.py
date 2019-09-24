@@ -18,7 +18,7 @@ class MyLDApi(object):
         app.config.setdefault("CITATION_TEMPLATE", "{type} {id}. {type} from the {dataset}. {uri}")
 
         # self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.objects[:])        
-        self.objects.append(self.rofr)
+        # self.objects.append(self.rofr)
 
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
@@ -30,6 +30,8 @@ class MyLDApi(object):
         self.blueprint.add_url_rule("/about", "about", self.show_about)
 
         for reg in self.objects:
+            if isinstance(reg, RegisterOfRegisters):
+
             self.blueprint.add_url_rule(os.path.join("/", reg.path, "<id>"), reg.path, self.show_register_object)
             
         # self.blueprint.add_url_rule(os.path.join("/",reg.path), "home", self.show_home)
@@ -67,16 +69,7 @@ class MyLDApi(object):
         reg_path = request.endpoint.split(".", 1)[1]
         register = self.register_for_path(reg_path)
 
-        view_key = request.args.get('_view')
-        format_key = request.args.get('_format')
-
-        view = register.get_view(view_key) if view_key else register.get_default_view()
-        if view == None:
-            raise NotImplementedError("No view exists of type '{}' on the requested object".format(view_key))
-
-        format = view.get_format(format_key) if format_key else view.get_default_format()
-        if format == None:
-            raise NotImplementedError("No format exists of type '{}' on the requested view".format(format_key))
+        view, format = self.get_view_format(request, register)
 
         uri = register.get_uri_for(id)
 
@@ -84,18 +77,48 @@ class MyLDApi(object):
 
     # this function is here to allow linkdata.gov.au redirect to be cleaner
     def show_object(self):
-        uri = request.args.get('uri', type=str, default=None)
-        register = register_for_uri(uri)
-        if register != None:
-            # redirect to the clean url
-            url_for(".")
-            pass
-        else:
-            pass
-            # show an error
+        uri = request.args.get('uri', type=str, default=None)        
+
+        obj = self.object_for_uri(uri)
+        if obj:
+            view, format = self.get_view_format(request, obj)
+            return format.render_response(uri, view, obj, request)
+
+        reg = self.register_for_uri(uri)
+        if reg:
+
+            return 
+
+        # if register != None:
+        #     # redirect to the clean url
+        #     url_for(".")
+        #     pass
+        # else:
+        #     pass
+        #     # show an error
+
+    def object_for_uri(self, uri):
+        obj = next((obj for obj in self.objects if obj.uri == uri), None)
+        if obj:
+            return obj
+        
 
     def register_for_uri(self, uri):
-        return next((reg for reg in self.objects if reg.can_resolve_uri(uri)), None)
+        return next((obj for obj in self.objects if isinstance(obj, Register) and uri in obj), None)
 
     def register_for_path(self, path):
         return next((reg for reg in self.objects if reg.path == path), None)
+
+    def get_view_format(self, request, obj):
+        view_key = request.args.get('_view')
+        format_key = request.args.get('_format')
+
+        view = obj.get_view(view_key) if view_key else obj.get_default_view()
+        if view == None:
+            raise NotImplementedError("No view exists of type '{}' on the requested object".format(view_key))
+
+        format = view.get_format(format_key) if format_key else view.get_default_format()
+        if format == None:
+            raise NotImplementedError("No format exists of type '{}' on the requested view".format(format_key))
+
+        return (view, format)
