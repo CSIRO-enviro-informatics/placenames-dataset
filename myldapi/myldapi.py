@@ -61,6 +61,7 @@ class MyLDApi(object):
 
         uri = register.get_uri_for(id)
 
+
         return format.render_response(uri, view, register, request)
 
     def show_rofr(self, id):        

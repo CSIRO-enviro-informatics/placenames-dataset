@@ -17,17 +17,20 @@ class RegisterOfRegisters(Register):
                          path=path,
                          base_uri=base_uri,
                          type_uri="http://purl.org/linked-data/registry#Register",
+                         type_name="Register",
                          views=views
                          )
 
     def get_label_for(id):
         uri = self.get_uri_for(id)
         register = next((reg for reg in self.registers if reg.base_uri == uri), None)
-        return f"Register of {register.name}"
+        return register.name # f"Register of {register.type_name}"
 
     def list_uris(self, page=0, per_page=20):
         reg_uris = [r.base_uri for r in self.registers]
-        return reg_uris[page*per_page:(page*per_page)+per_page]
+        startindex = page * per_page
+        endindex = startindex + per_page
+        return reg_uris[startindex:endindex]
 
     def get_count(self):
         return len(self.registers)

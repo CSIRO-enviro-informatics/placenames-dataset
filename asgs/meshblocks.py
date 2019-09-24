@@ -52,9 +52,10 @@ class Meshblock(Register):
             count=MESHBLOCK_COUNT,
             attr_map=self.attribute_mappings)
 
-        super().__init__(name = "Meshblock",
+        super().__init__(name = "Register of ASGS Meshblocks",
                          path = "meshblock",
                          type_uri = "http://linked.data.gov.au/def/asgs#MeshBlock",
+                         type_name = "Meshblock",
                          base_uri = f"{DATASET_URI}/meshblock",
                          views=[
                              ASGSView(self.source)

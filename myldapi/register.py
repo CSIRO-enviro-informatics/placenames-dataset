@@ -2,11 +2,12 @@ import os
 from .utils import id_from_uri, base_from_uri
 
 class Register:
-    def __init__(self, name, path, base_uri, type_uri, views):
+    def __init__(self, name, path, base_uri, type_uri, type_name, views):
         self.name = name
         self.path = path
         self.base_uri = base_uri
         self.type_uri = type_uri
+        self.type_name = type_name
         self.views = views
 
         if not isinstance(views, list):
