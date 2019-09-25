@@ -17,29 +17,32 @@ class RegisterView(View):
                          formats=[
                              HTMLFormat(template),
                              *common_rdf_formats
-                         ])        
+                         ])
         self.registers = registers
 
     def get_attributes(self, uri, **kwargs):
         result = []
         page, per_page = self.get_page_args(**kwargs)
-        
-        register = next((reg for reg in self.registers if reg.base_uri == uri), None)
+
+        register = next(
+            (reg for reg in self.registers if reg.base_uri == uri), None)
 
         page_uris = register.list_uris(page, per_page)
 
-        list_mapping = AttributeMapping("uris", f"List of {register.type_name}", typefunc=list)
-        values = [AttributeMappingValue(uri, register.get_label_for(id_from_uri(uri)), uri) for uri in page_uris]
-        
+        list_mapping = AttributeMapping(
+            "uris", f"List of {register.type_name}", typefunc=list)
+        values = [AttributeMappingValue(uri, register.get_label_for(
+            id_from_uri(uri)), uri) for uri in page_uris]
+
         list_mapping_value = AttributeMappingValue(values, None)
 
         result.append((list_mapping, list_mapping_value))
-        result.append((AttributeMapping("reg_type", Pred("http://purl.org/linked-data/registry#containedItemClass")), 
-                      AttributeMappingValue(register.type_uri, register.type_uri, register.type_uri)))
+        result.append((AttributeMapping("contained_item_class", Pred("http://purl.org/linked-data/registry#containedItemClass")),
+                       AttributeMappingValue(register.type_uri, register.type_name, register.type_uri)))
 
         item_count = register.get_count()
-        result.append((AttributeMapping("item_count", None), 
-                      AttributeMappingValue(item_count, str(item_count))))
+        result.append((AttributeMapping("item_count", None),
+                       AttributeMappingValue(item_count, str(item_count))))
         return result
 
     def get_graph(self, uri, **kwargs):

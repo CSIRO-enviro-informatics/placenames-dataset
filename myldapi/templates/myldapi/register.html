@@ -4,7 +4,8 @@
 <section class="myldapi-section">
     <div class="row">
         <div class="col-12">
-            <h1>Register of <a href="{{type_uri}}">{{type_name}}</a></h1>
+            {% set item_type_am, item_type_v = find_prop(attr_map, 'contained_item_class') %}
+            <h1><a href="{{type_uri}}">{{ type_name }}</a> of <a href="{{item_type_v.uri}}">{{ item_type_v.label }}</a></h1>
             <p class="lead">{{ uri }}</p>
         </div>
     </div>
