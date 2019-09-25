@@ -18,6 +18,7 @@
             <ul>
                 {% set am, v = find_prop(attr_map, 'uris') %}
                 {% for uri_val in v.value %}                
+                <!-- Could debate if we use official URI, or app relative URI here -->
                 <li><a href="{{uri_val.uri}}">{{uri_val.label}}</a></li>                
                 {% endfor %}
             </ul>

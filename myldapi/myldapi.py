@@ -16,11 +16,9 @@ class MyLDApi(object):
         # Not sure DATASET_NAME is a good config var. I would like to tie it to RofR maybe? but gets used in citation stuff
         check_config('DATASET_NAME', app)
         check_config('DATASET_URI', app)
-        app.config.setdefault("CITATION_TEMPLATE",
-                              "{type} {id}. {type} from the {dataset}. {uri}")
+        app.config.setdefault("CITATION_TEMPLATE","{type} {id}. {type} from the {dataset}. {uri}")
 
-        self.rofr = RegisterOfRegisters(
-            app.config["DATASET_URI"], self.registers[:])
+        self.rofr = RegisterOfRegisters(app.config["DATASET_URI"], self.registers[:])
         self.registers.append(self.rofr)
 
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
@@ -33,8 +31,7 @@ class MyLDApi(object):
         self.blueprint.add_url_rule("/about", "about", self.show_about)
 
         for reg in self.registers:
-            self.blueprint.add_url_rule(os.path.join(
-                "/", reg.path, "<id>"), reg.path, self.show_register_object)
+            self.blueprint.add_url_rule(os.path.join("/", reg.path, "<id>"), reg.path, self.show_register_object)
 
         self.blueprint.add_url_rule(os.path.join(
             "/", reg.path), "home", self.show_home)

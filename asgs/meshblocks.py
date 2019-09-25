@@ -1,11 +1,11 @@
 from .asgs_view import ASGSView
-from myldapi import Register, AttributeMapping, AttributeMappingPredicate as Pred
+from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, MESHBLOCK_COUNT
 
-class Meshblock(Register):
+class Meshblock(SourceRegister):
     def __init__(self):            
-        self.attribute_mappings = [
+        attribute_mappings = [
                 AttributeMapping(varname="object_id", 
                                  wfs_attr="MB:OBJECTID"),
                 AttributeMapping(varname="albers_area", 
@@ -42,7 +42,7 @@ class Meshblock(Register):
                                  wfs_attr="MB:ADD_CODE_2016"),
             ]
 
-        self.source = WFSSource(
+        source = WFSSource(
             endpoint="https://geo.abs.gov.au/arcgis/services/ASGS2016/MB/MapServer/WFSServer",
             typename="MB:MB",
             id_prop="MB:MB_CODE_2016",
@@ -50,7 +50,7 @@ class Meshblock(Register):
                 "MB": "WFS"
             },
             count=MESHBLOCK_COUNT,
-            attr_map=self.attribute_mappings)
+            attr_map=attribute_mappings)
 
         super().__init__(name = "Register of ASGS Meshblocks",
                          path = "meshblock",
@@ -58,15 +58,6 @@ class Meshblock(Register):
                          type_name = "Meshblock",
                          base_uri = f"{DATASET_URI}/meshblock",
                          views=[
-                             ASGSView(self.source)
-                         ])    
-
-
-    def list_uris(self, page=1, per_page=20):
-        startindex = (page - 1) * per_page
-        take = per_page if startindex + per_page < self.get_count() else self.get_count() - startindex 
-        ids = self.source.get_ids(startindex, take)
-        return [self.get_uri_for(id) for id in ids]
-
-    def get_count(self):
-        return self.source.get_count()
+                             ASGSView(source)
+                         ], 
+                         source=source)    
