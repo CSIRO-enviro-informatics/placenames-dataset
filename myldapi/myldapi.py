@@ -1,6 +1,6 @@
 import os
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
-from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, PACKAGE_NAME, id_from_uri
+from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, PACKAGE_NAME, id_from_uri, base_from_uri
 from .rofr import RegisterOfRegisters
 
 
@@ -37,7 +37,9 @@ class MyLDApi(object):
         context_vars = {
             "dataset_name": self.dataset_name,
             "dataset_home_endpoint": "dataset_root", #self.rofr.get_route_endpoint()
-            "rofr": self.rofr
+            "rofr": self.rofr,
+            "id_from_uri": id_from_uri,
+            "base_from_uri": base_from_uri
             }
 
         self.blueprint.add_url_rule(os.path.join("/",reg.path), context_vars["dataset_home_endpoint"], self.show_rofr) #strict_slashes=False
