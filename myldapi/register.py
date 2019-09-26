@@ -48,5 +48,6 @@ class Register:
     def get_view(self, key):
         return next((v for v in self.views if v.key == key), None)
 
-    def get_reg_endpoint(self):
-        return f"{self.path}/reg"
+    def get_route_endpoint(self):
+        """Used to provide an endpoint name for the flask blueprint"""        
+        return f"{self.path}/register"

@@ -7,7 +7,7 @@ from myldapi import MyLDApi
 app = Flask(__name__)
 app.config.from_object(asgs.config)
 
-myapi = MyLDApi(app, [
+myapi = MyLDApi(app, asgs.config.DATASET_NAME, asgs.config.DATASET_URI, [
         Meshblock()
     ])
 

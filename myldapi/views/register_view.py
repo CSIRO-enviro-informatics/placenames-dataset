@@ -24,8 +24,7 @@ class RegisterView(View):
         result = []
         page, per_page = self.get_page_args(**kwargs)
 
-        register = next(
-            (reg for reg in self.registers if reg.base_uri == uri), None)
+        register = next((reg for reg in self.registers if reg.base_uri == uri), None)
 
         page_uris = register.list_uris(page, per_page)
 
