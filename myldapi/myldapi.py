@@ -42,7 +42,7 @@ class MyLDApi(object):
         self.blueprint.add_url_rule(os.path.join("/",reg.path), context_vars["dataset_home_endpoint"], self.show_rofr) #strict_slashes=False
         self.blueprint.context_processor(lambda: context_vars)
 
-        app.register_blueprint(self.blueprint)
+        app.register_blueprint(self.blueprint, url_prefix='/dataset')
     
 
     def show_about(self):
@@ -51,7 +51,7 @@ class MyLDApi(object):
     def show_rofr(self):
         #assuming single rofr for now
         register = self.rofr
-        
+
         # sort of a temp parent to register to run through the render pipeline
         dummy_reg = RegisterOfRegisters("http://dummydata/root",[register])
         view, format = self.get_view_and_format(request, dummy_reg)

@@ -23,7 +23,9 @@ class HTMLFormat(Format):
             "view": view,
             "parent_register": parent_register,
             "attr_map": props,
-            "find_prop": find_prop
+            "find_prop": find_prop,
+            "id_from_uri": id_from_uri,
+            "base_from_uri": base_from_uri
         }
         html_vars.update(kwargs)
 

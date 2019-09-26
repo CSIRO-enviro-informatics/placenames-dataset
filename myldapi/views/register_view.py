@@ -28,10 +28,8 @@ class RegisterView(View):
 
         page_uris = register.list_uris(page, per_page)
 
-        list_mapping = AttributeMapping(
-            "uris", f"List of {register.type_name}", typefunc=list)
-        values = [AttributeMappingValue(uri, register.get_label_for(
-            id_from_uri(uri)), uri) for uri in page_uris]
+        list_mapping = AttributeMapping("uris", f"List of {register.type_name}", typefunc=list)
+        values = [AttributeMappingValue(uri, register.get_label_for(id_from_uri(uri)), uri) for uri in page_uris]
 
         list_mapping_value = AttributeMappingValue(values, None)
 
@@ -42,6 +40,8 @@ class RegisterView(View):
         item_count = register.get_count()
         result.append((AttributeMapping("item_count", None),
                        AttributeMappingValue(item_count, str(item_count))))
+        result.append((AttributeMapping("endpoint", None),
+                       AttributeMappingValue(register.get_route_endpoint(), register.get_route_endpoint())))
         return result
 
     def get_graph(self, uri, **kwargs):

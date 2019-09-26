@@ -17,9 +17,17 @@
             <h3>Items in this Register:</h3>
             <ul>
                 {% set am, v = find_prop(attr_map, 'uris') %}
+                {% set am_ep, v_ep = find_prop(attr_map, 'endpoint') %}
                 {% for uri_val in v.value %}                
-                <!-- Could debate if we use official URI, or app relative URI here -->
-                <li><a href="{{uri_val.uri}}">{{uri_val.label}}</a></li>                
+                <li>
+                    <!-- Could debate if we use official URI, or app relative URI here -->
+                    <!-- absolute -->
+                    <!-- <a href="{{uri_val.uri}}">  -->
+                    <!-- relative -->
+                    <a href="{{url_for('.' + v_ep.value, id=id_from_uri(uri_val.uri))}}">
+                        {{uri_val.label}}
+                    </a>
+                </li>                
                 {% endfor %}
             </ul>
         </div>
