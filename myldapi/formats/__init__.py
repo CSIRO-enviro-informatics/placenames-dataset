@@ -4,4 +4,4 @@ from .html import HTMLFormat
 from .rdf_base import RDFBaseFormat
 from .json import JSONFormat
 
-common_rdf_formats = [TurtleFormat(), RDFXMLFormat(), JSONLDFormat, NTFormat(), N3Format()]
+common_rdf_formats = [TurtleFormat(), RDFXMLFormat(), JSONLDFormat(), NTFormat(), N3Format()]

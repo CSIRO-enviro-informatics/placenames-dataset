@@ -1,7 +1,7 @@
 import os
 from .utils import id_from_uri, base_from_uri
 from .register import Register
-from .views import AlternatesView, RegisterView
+from .views import RegisterView
 
 
 class RegisterOfRegisters(Register):

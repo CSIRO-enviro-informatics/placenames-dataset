@@ -43,7 +43,7 @@ class MyLDApi(object):
         self.blueprint.add_url_rule(os.path.join("/",reg.path), context_vars["dataset_home_endpoint"], self.show_rofr) #strict_slashes=False
         self.blueprint.context_processor(lambda: context_vars)
 
-        app.register_blueprint(self.blueprint, url_prefix='/dataset')
+        app.register_blueprint(self.blueprint)
     
 
     def show_about(self):

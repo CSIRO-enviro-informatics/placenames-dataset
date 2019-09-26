@@ -2,7 +2,6 @@ import rdflib
 from .view import View
 from ..formats import HTMLFormat, common_rdf_formats
 from ..utils import DEFAULT_TEMPLATE_REGISTER, DEFAULT_PAGE_SIZE, id_from_uri
-from ..register import Register
 from ..attr_mapping import AttributeMapping, AttributeMappingPredicate as Pred, AttributeMappingValue
 
 

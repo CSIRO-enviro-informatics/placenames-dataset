@@ -1,6 +1,6 @@
 import os
 from .utils import id_from_uri, base_from_uri
-
+from .views import AlternatesView
 class Register:
     def __init__(self, name, path, base_uri, type_uri, type_name, views):
         self.name = name
@@ -12,6 +12,9 @@ class Register:
 
         if not isinstance(views, list):
             self.views = [views]
+
+        #Everyone has an alternates view
+        self.views.append(AlternatesView(self)) 
 
         if self.base_uri[-1] == "/":
             raise ValueError("base_uri must not have trailing '/' ")
