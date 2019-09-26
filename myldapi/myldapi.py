@@ -36,7 +36,8 @@ class MyLDApi(object):
 
         context_vars = {
             "dataset_name": self.dataset_name,
-            "dataset_home_endpoint": "dataset_root" #self.rofr.get_route_endpoint()
+            "dataset_home_endpoint": "dataset_root", #self.rofr.get_route_endpoint()
+            "rofr": self.rofr
             }
 
         self.blueprint.add_url_rule(os.path.join("/",reg.path), context_vars["dataset_home_endpoint"], self.show_rofr) #strict_slashes=False

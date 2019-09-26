@@ -31,7 +31,11 @@
                                 <span class="caret"></span></a>
                             <div class="dropdown-menu" aria-labelledby="registers">
                                 <!-- Look into how we can get the full list of registers without passing it into render_template. Perhaps global var? Blueprint? -->
-                                <a class="dropdown-item" href="">Default</a>
+                                {% for reg_uri in rofr.list_uris() %} 
+                                <a class="dropdown-item" href="{{url_for('.' + rofr.get_route_endpoint(), id=id_from_uri(reg_uri))}}">
+                                    {{rofr.get_label_for(id_from_uri(reg_uri))}}
+                                </a>
+                                {% endfor %} 
                             </div>
                         </li>
                         <li class="nav-item">
