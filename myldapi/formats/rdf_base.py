@@ -16,4 +16,8 @@ class RDFBaseFormat(Format):
         graph.destroy({})
         del graph
 
+        headers = {
+            'Content-Type': self.default_media_type()
+        }
+
         return Response(response_text, mimetype=self.default_media_type(), headers=headers)

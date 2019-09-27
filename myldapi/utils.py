@@ -38,3 +38,11 @@ def check_config(name, app):
 
 def find_prop(pairs, varname):
     return next(((am, v) for am, v in pairs if am.varname == varname), None)
+
+def bind_common(graph):
+    graph.bind('geo', GEO)
+    graph.bind('geox', GEOX)
+    graph.bind('data', DATA)
+    graph.bind('ogc', OGC)
+    graph.bind('gml', GML)
+    graph.bind('qb4st', QB4ST)

@@ -2,52 +2,68 @@ from .asgs_view import ASGSView
 from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, MESHBLOCK_COUNT
-
+from .sa1 import StatisticalAreaLevel1
+from .states import StateOrTerritory
+from .common import get_common_attributes
+from myldapi.utils import RDF_a
 class Meshblock(SourceRegister):
-    def __init__(self):            
+    def __init__(self):  
+        ns = "MB"
         attribute_mappings = [
-                AttributeMapping(varname="object_id", 
-                                 wfs_attr="MB:OBJECTID"),
-                AttributeMapping(varname="albers_area", 
-                                 wfs_attr="MB:AREA_ALBERS_SQKM"),
-                AttributeMapping(varname="shape_length", 
-                                 wfs_attr="MB:Shape_Length"),
-                AttributeMapping(varname="shape_area", 
-                                 wfs_attr="MB:Shape_Area"),
-                AttributeMapping(varname="shape",
-                                 wfs_attr="MB:Shape"),
                 AttributeMapping(varname="code", 
-                                 wfs_attr="MB:MB_CODE_2016"),
+                                 predicate=Pred(ASGS.mbCode2016), 
+                                 wfs_attr=f"{ns}:MB_CODE_2016"),
                 AttributeMapping(varname="category", 
-                                 wfs_attr="MB:MB_CATEGORY_CODE_2016"),
+                                 wfs_attr=f"{ns}:MB_CATEGORY_CODE_2016"),
                 AttributeMapping(varname="category_name",
                                  label="Category", 
                                  predicate=Pred(ASGS.category), 
-                                 wfs_attr="MB:MB_CATEGORY_NAME_2016"),
+                                 wfs_attr=f"{ns}:MB_CATEGORY_NAME_2016"),
                 AttributeMapping(varname="sa1", 
                                  label="Within SA1", 
                                  predicate=Pred(ASGS.isStatisticalAreaLevel1Of, inverse=True, comment="The SA1 this meshblock is within"), 
-                                 wfs_attr="MB:SA1_MAINCODE_2016"),
+                                 converter=AttributeMapping.reg_id_converter(StatisticalAreaLevel1),
+                                 wfs_attr=f"{ns}:SA1_MAINCODE_2016"),
                 AttributeMapping(varname="state", 
                                  label="Within State or Territory", 
                                  predicate=Pred(ASGS.isStateOrTerritoryOf, inverse=True, comment="The state this meshblock is within"), 
-                                 wfs_attr="MB:STATE_CODE_2016"),
+                                 converter=AttributeMapping.reg_id_converter(StateOrTerritory),
+                                 wfs_attr=f"{ns}:STATE_CODE_2016"),
                 AttributeMapping(varname="dzn", 
-                                 wfs_attr="MB:DZN_CODE_2016"),
-                AttributeMapping(varname="ssc",  
-                                 wfs_attr="MB:SSC_CODE_2016"),
-                AttributeMapping(varname="nrmr",  
-                                 wfs_attr="MB:NRMR_CODE_2016"),
-                AttributeMapping(varname="add",  
-                                 wfs_attr="MB:ADD_CODE_2016"),
+                                 label="Within Destination Zone",
+                                 predicate=Pred(ASGS.contains, inverse=True, comment="Destination Zone meshblock is within", 
+                                                builder=Pred.node_builder(None, [
+                                                        (Pred(RDF_a), ASGS.DestinationZone),
+                                                        (Pred(ASGS.dznCode2016), "dzn")
+                                                    ])),                                                
+                                 wfs_attr=f"{ns}:DZN_CODE_2016"),
+                AttributeMapping(varname="ssc",
+                                 label="Within StateSuburb Code", 
+                                 predicate=Pred(ASGS.contains, inverse=True, comment="StateSuburb Code meshblock is within", 
+                                                builder=Pred.node_builder(None, [
+                                                        (Pred(RDF_a), ASGS.StateSuburb),
+                                                        (Pred(ASGS.sscCode2016), "ssc")
+                                                    ])),                                                
+                                 wfs_attr=f"{ns}:SSC_CODE_2016"),
+                AttributeMapping(varname="nrmr",
+                                 label="Within Natural Resource Management Region",
+                                 predicate=Pred(ASGS.contains, inverse=True, comment="NRMR meshblock is within", 
+                                                builder=Pred.node_builder(None, [
+                                                        (Pred(RDF_a), ASGS.NaturalResourceManagementRegion),
+                                                        (Pred(ASGS.nrmrCode2016), "nrmr")
+                                                    ])),                                                
+                                 wfs_attr=f"{ns}:NRMR_CODE_2016"),
+                # AttributeMapping(varname="add",  
+                #                  wfs_attr=f"{ns}:ADD_CODE_2016"),
+                *get_common_attributes(ns),
             ]
 
         source = WFSSource(
-            endpoint="https://geo.abs.gov.au/arcgis/services/ASGS2016/MB/MapServer/WFSServer",
-            typename="MB:MB",
-            id_prop="MB:MB_CODE_2016",
+            endpoint=f"https://geo.abs.gov.au/arcgis/services/ASGS2016/{ns}/MapServer/WFSServer",
+            typename=f"{ns}:MB",
+            id_prop=f"{ns}:MB_CODE_2016",
             ns_map={
-                "MB": "WFS"
+                f"{ns}": "WFS"
             },
             count=MESHBLOCK_COUNT,
             attr_map=attribute_mappings)

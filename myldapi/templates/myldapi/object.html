@@ -22,23 +22,19 @@
             <h3>Attributes</h3>
         </div> -->
         {% for item, value in attr_map %}
-        {% if item.label or item.predicate.label %}
+        {% if item.label  %}
         <dt class="col-sm-3">
-            {% if item.predicate.uri %}
-            <a title="{{ item.predicate.comment }}" href="{{ item.predicate.uri }}">{{ item.predicate.label }}</a>
+            {% if item.predicate.pred_uri %}
+                <a title="{{ item.predicate.comment }}" href="{{ item.predicate.pred_uri }}">{{ item.label }}</a>
             {% else %}
-            {% if item.predicate.label %}
-            {{ item.predicate.label }}
-            {% else %}
-            {{ item.label }}
-            {% endif %}
+                {{ item.label }}
             {% endif %}
         </dt>
         <dd class="col-sm-9">
             {% if value.uri %}
-            <a href="{{ value.uri }}">{{ value.label }}</a>
+                <a href="{{ value.uri }}">{{ value.label }}</a>
             {% else %}
-            {{ value.label }}
+                {{ value.label }}
             {% endif %}
         </dd>
         {% endif %}

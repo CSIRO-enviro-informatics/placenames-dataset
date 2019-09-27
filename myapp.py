@@ -1,6 +1,8 @@
 import logging
 from flask import Flask
 from asgs.meshblocks import Meshblock
+from asgs.sa1 import StatisticalAreaLevel1
+from asgs.states import StateOrTerritory
 import asgs.config
 from myldapi import MyLDApi
 
@@ -8,7 +10,9 @@ app = Flask(__name__)
 app.config.from_object(asgs.config)
 
 myapi = MyLDApi(app, asgs.config.DATASET_NAME, asgs.config.DATASET_URI, [
-        Meshblock()
+        Meshblock(),
+        StatisticalAreaLevel1(),
+        StateOrTerritory()
     ])
 
 # run the Flask app

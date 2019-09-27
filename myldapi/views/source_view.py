@@ -1,6 +1,7 @@
 import rdflib
+from rdflib import URIRef, Literal
 from .view import View
-from ..utils import id_from_uri, base_from_uri
+from ..utils import id_from_uri, base_from_uri, bind_common, RDF_a
 
 
 class SourceView(View):
@@ -14,13 +15,11 @@ class SourceView(View):
     def get_graph(self, uri, **kwargs):
         attr_values = self.source.get_object_details(uri)
         g = rdflib.Graph()
-        g.bind('asgs', ASGS)
-        g.bind('geo', GEO)
-        g.bind('geox', GEOX)
-        g.bind('data', DATA)
+        bind_common(g)
 
         for am, val in attr_values:
-            for p in am.predicates:    
-                pass            
+            if am.predicate:
+                v = URIRef(val.uri) if val.uri else Literal(val.value)
+                am.predicate.add_to_graph(g, uri, v, attr_values)
 
         return g
