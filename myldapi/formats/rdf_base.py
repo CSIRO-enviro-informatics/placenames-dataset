@@ -9,7 +9,7 @@ class RDFBaseFormat(Format):
 
     def render_response(self, uri, view, register, request, **kwargs):
         graph = view.get_graph(uri)
-        response_text = graph.serialize(format=self.rdflib_format)
+        response_text = graph.serialize(format=self.rdflib_format, encoding='utf-8')
 
         #clean up a memory leak from RDFLib
         graph.store.remove((None, None, None))

@@ -32,9 +32,18 @@ class AttributeMapping:
             
     @staticmethod
     def format_converter(template):
+        """Takes a string template and applies the value to it"""
         def converter(value):
             formatted = template.format(value)
             return AttributeMappingValue(value, formatted)
+        return converter
+
+    @staticmethod
+    def basic_converter(func):
+        """Applies a function to the value and returns it"""
+        def converter(value):
+            new_val = func(value)
+            return AttributeMappingValue(new_val, str(new_val))
         return converter
 
 class AttributeMappingValue:
@@ -63,9 +72,10 @@ class AttributeMappingPredicate:
                 g.add((obj_uri, URIRef(self.pred_uri), rdf_term_val))
 
 
+    @staticmethod
     def node_builder(uri, prop_map):
         """uri can be None, prop_name, or uri"""
-        """prop_map is a list of tuples (AttributeMappingPredicate, varname or URIRef)"""
+        """prop_map is a list of tuples (AttributeMappingPredicate, varname or URIRef, BNode, Literal)"""
         def builder(g, obj_uri, pred, rdf_term_val, attr_map_vals):
             if not uri:
                 node = BNode()
@@ -78,7 +88,7 @@ class AttributeMappingPredicate:
                 node = URIRef(v.uri)
             
             for prop_pred, uri_or_varname in prop_map:
-                if isinstance(uri_or_varname, URIRef):
+                if isinstance(uri_or_varname, Identifier):
                     prop_pred.add_to_graph(g, node, uri_or_varname, attr_map_vals)
                 else: # lookup the value
                     am, v = find_prop(attr_map_vals, uri_or_varname)
