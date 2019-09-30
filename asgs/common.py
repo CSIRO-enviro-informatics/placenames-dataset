@@ -30,6 +30,10 @@ def get_common_attributes(ns):
                                         ])),   
                          typefunc=Decimal,
                          wfs_attr=f"{ns}:Shape_Area"),
+    ]
+
+def get_geometry_attributes(ns): 
+    return [
         AttributeMapping(varname="geometry",
                          wfs_attr=f"{ns}:Shape",
                          element_converter=take_xml_as_string_element_converter,
@@ -44,4 +48,5 @@ def get_common_attributes(ns):
                          element_converter=gml_extract_geom_to_geojson,
                          )
     ]
+
 

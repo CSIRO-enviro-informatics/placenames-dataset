@@ -4,7 +4,7 @@ from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, MESHBLOCK_COUNT
 from .sa1 import StatisticalAreaLevel1
 from .states import StateOrTerritory
-from .common import get_common_attributes
+from .common import get_common_attributes, get_geometry_attributes
 from myldapi.utils import RDF_a
 class Meshblock(SourceRegister):
     def __init__(self):  
@@ -56,6 +56,7 @@ class Meshblock(SourceRegister):
                 # AttributeMapping(varname="add",  
                 #                  wfs_attr=f"{ns}:ADD_CODE_2016"),
                 *get_common_attributes(ns),
+                *get_geometry_attributes(ns)
             ]
 
         source = WFSSource(

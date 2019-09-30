@@ -72,8 +72,11 @@ class WFSSource(Source):
     #     return url
 
     def query_for_id(self, id):
+        property_list = [am.wfs_attr for am in self.attr_map if hasattr(am, 'wfs_attr')]
+        property_names = ",".join(property_list)
         uri_template = self.endpoint + \
             '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \
+            '&propertyName={property_names}' \
             '&Filter=<ogc:Filter>' \
                 '<ogc:PropertyIsEqualTo>' \
                     '<ogc:PropertyName>{self.id_prop}</ogc:PropertyName>' \

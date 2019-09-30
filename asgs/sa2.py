@@ -2,7 +2,7 @@ from .asgs_view import ASGSView
 from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, SA2_COUNT
-from .common import get_common_attributes
+from .common import get_common_attributes, get_geometry_attributes
 
 class StatisticalAreaLevel1(SourceRegister):
     def __init__(self):       
@@ -27,6 +27,7 @@ class StatisticalAreaLevel1(SourceRegister):
                                  predicate=Pred(ASGS.isStateOrTerritoryOf, inverse=True, comment="The state this SA2 is within"), 
                                  wfs_attr=f"{ns}:STATE_CODE_2016"),
                 *get_common_attributes(ns),
+                *get_geometry_attributes(ns)
             ]
 
         source = WFSSource(
