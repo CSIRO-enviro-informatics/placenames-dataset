@@ -22,7 +22,8 @@ class View:
         return self.formats[0]
     
     def get_format(self, media_type):
-        return next((f for f in self.formats if media_type in f.media_types), None)
+        priority = next((f for f in self.formats if media_type == f.default_media_type()), None)
+        return priority if priority else next((f for f in self.formats if media_type in f.media_types), None)
 
     def get_format_by_extension(self, ext):
         return next((f for f in self.formats if ext in f.extensions), None)

@@ -17,7 +17,7 @@ class AttributeMapping:
         if self.converter:
             return self.converter(typed_val)
         else:
-            return AttributeMappingValue(typed_val, str(typed_val))
+            return AttributeMappingValue(typed_val, None)
 
     @staticmethod
     def reg_id_converter(register_cls, *args, **kwargs):
@@ -43,7 +43,7 @@ class AttributeMapping:
         """Applies a function to the value and returns it"""
         def converter(value):
             new_val = func(value)
-            return AttributeMappingValue(new_val, str(new_val))
+            return AttributeMappingValue(new_val, None)
         return converter
 
 class AttributeMappingValue:

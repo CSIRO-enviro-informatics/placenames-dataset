@@ -20,6 +20,7 @@ def get_common_attributes(ns):
                          converter=AttributeMapping.basic_converter(lambda val: val * 1000000), #convert to m^2
                          wfs_attr=f"{ns}:AREA_ALBERS_SQKM"),
         AttributeMapping(varname="shape_length", 
+                         typefunc=Decimal,
                          wfs_attr=f"{ns}:Shape_Length"),
         AttributeMapping(varname="shape_area", 
                          predicate=Pred(GEOX.hasAreaM2, 
