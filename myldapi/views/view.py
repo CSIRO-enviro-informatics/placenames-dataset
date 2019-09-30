@@ -1,11 +1,12 @@
 import rdflib
 
 class View:
-    def __init__(self, name, comment, key, formats):
+    def __init__(self, name, comment, key, formats, namespace=None):
         self.name = name
         self.comment = comment
         self.key = key
         self.formats = formats
+        self.namespace = namespace
 
         if not isinstance(formats, list):
             self.formats = [formats]
