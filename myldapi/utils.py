@@ -47,6 +47,7 @@ def bind_common(graph):
     graph.bind('ogc', OGC)
     graph.bind('gml', GML)
     graph.bind('qb4st', QB4ST)
+    graph.bind('rdfs', QB4ST)
 
 
 def take_xml_as_string_element_converter(lxml_element):

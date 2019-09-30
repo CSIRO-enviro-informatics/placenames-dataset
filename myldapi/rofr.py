@@ -8,7 +8,7 @@ class RegisterOfRegisters(Register):
     def __init__(self, base_uri, registers, name="Register of Registers", path="", views=None):
         if views == None:
             views = [
-                RegisterView(registers)
+                RegisterView(self)
             ]
 
         self.registers = registers

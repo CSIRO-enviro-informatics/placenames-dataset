@@ -10,8 +10,8 @@ class JSONFormat(Format):
                          "application/json",
                          "json")
 
-    def render_response(self, uri, view, register, request, **kwargs):
-        attr_map = view.get_attributes(uri)
+    def render_response(self, uri, view, parent_register, request, **kwargs):
+        attr_map = view.get_attributes(uri, **kwargs)
         deets = {}
 
         # Just the values

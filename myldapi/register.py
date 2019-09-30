@@ -45,6 +45,9 @@ class Register:
     def get_count(self):
         raise NotImplementedError('Must implement the get_count method')
 
+    def get_uri(self):
+        return self.base_uri
+
     def get_default_view(self):
         return self.views[0]
 
