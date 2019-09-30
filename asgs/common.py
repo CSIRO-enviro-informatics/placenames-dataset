@@ -1,5 +1,7 @@
 from myldapi import AttributeMapping, AttributeMappingPredicate as Pred
-from myldapi.utils import GEOX, DATA, QB4ST, CRS_EPSG
+from myldapi.utils import GEOX, DATA, QB4ST, CRS_EPSG, GML, GEO, RDF_a, \
+                          take_xml_as_string_element_converter, \
+                          gml_extract_geom_to_geojson
 from rdflib import URIRef
 from decimal import Decimal
 
@@ -27,7 +29,18 @@ def get_common_attributes(ns):
                                         ])),   
                          typefunc=Decimal,
                          wfs_attr=f"{ns}:Shape_Area"),
-        AttributeMapping(varname="shape",
-                         wfs_attr=f"{ns}:Shape")
+        AttributeMapping(varname="geometry",
+                         wfs_attr=f"{ns}:Shape",
+                         element_converter=take_xml_as_string_element_converter,
+                         predicate=Pred(GEO.hasGeometry, 
+                                        builder=Pred.node_builder(None, [
+                                            (Pred(RDF_a), GEO.Geometry),
+                                            (Pred(GML.asGML), "geometry", GML.gmlLiteral)
+                                        ])),   
+                         ),
+        AttributeMapping(varname="geojson",
+                         wfs_attr=f"{ns}:Shape",
+                         element_converter=gml_extract_geom_to_geojson,
+                         )
     ]
 

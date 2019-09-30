@@ -23,13 +23,20 @@ class WFSSource(Source):
         resp = requests.get(url)
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         for am in self.attr_map:
-            results = tree.xpath('//{}/text()'.format(am.wfs_attr), namespaces=tree.getroot().nsmap)
+            results = tree.xpath(f"//{am.wfs_attr}", namespaces=tree.getroot().nsmap)
+            
             if len(results) > 1:
                 raise NotImplementedError("We currently dont handle WFS objects with multiple attributes of the same name")
             elif len(results) == 0:
                 value = None
-            else: 
-                value = am.create_value(results[0])
+            else:
+                if hasattr(am, "element_converter"):
+                    result = am.element_converter(results[0])
+                else:
+                    result = results[0].text #default to just take the te
+ 
+                value = am.create_value(result)
+
             attr_pairings.append((am, value))
 
         return attr_pairings
