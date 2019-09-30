@@ -30,7 +30,7 @@ class Register:
         return view.get_graph()
 
     def get_label_for(self, id):
-        return f"{self.type_name}# {str(id)}"
+        return f"{self.type_name} #{str(id)}"
 
     def list_uris(self, page=1, per_page=20):
         raise NotImplementedError('Must implement the get_ids method')

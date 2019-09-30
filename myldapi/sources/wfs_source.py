@@ -21,6 +21,8 @@ class WFSSource(Source):
         id = id_from_uri(uri)
         url = self.query_for_id(id)
         resp = requests.get(url)
+        #should check for an exception here and blow out when making a bad request.
+
         tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
         for am in self.attr_map:
             results = tree.xpath(f"//{am.wfs_attr}", namespaces=tree.getroot().nsmap)
@@ -73,6 +75,8 @@ class WFSSource(Source):
 
     def query_for_id(self, id):
         property_list = [am.wfs_attr for am in self.attr_map if hasattr(am, 'wfs_attr')]
+        property_list.append(self.id_prop)
+        property_list = list(dict.fromkeys(property_list)) #remove duplicates
         property_names = ",".join(property_list)
         uri_template = self.endpoint + \
             '?service=wfs&version=2.0.0&request=GetFeature&typeName={self.typename}' \

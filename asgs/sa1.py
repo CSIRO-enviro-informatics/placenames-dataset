@@ -3,6 +3,8 @@ from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate 
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, SA1_COUNT
 from .common import get_common_attributes, get_geometry_attributes
+from .sa2 import StatisticalAreaLevel2
+from .states import StateOrTerritory
 
 class StatisticalAreaLevel1(SourceRegister):
     def __init__(self):       
@@ -17,10 +19,12 @@ class StatisticalAreaLevel1(SourceRegister):
                 AttributeMapping(varname="sa2", 
                                  label="Within SA2", 
                                  predicate=Pred(ASGS.isStatisticalAreaLevel2Of, inverse=True, comment="The SA2 this SA1 is within"), 
+                                 converter=AttributeMapping.reg_id_converter(StatisticalAreaLevel2),
                                  wfs_attr=f"{ns}:SA2_MAINCODE_2016"),
                 AttributeMapping(varname="state", 
                                  label="Within State or Territory", 
                                  predicate=Pred(ASGS.isStateOrTerritoryOf, inverse=True, comment="The state this SA1 is within"), 
+                                 converter=AttributeMapping.reg_id_converter(StateOrTerritory),
                                  wfs_attr=f"{ns}:STATE_CODE_2016"),
                 *get_common_attributes(ns),
                 *get_geometry_attributes(ns)

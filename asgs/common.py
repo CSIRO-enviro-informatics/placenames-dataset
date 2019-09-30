@@ -11,6 +11,7 @@ def get_common_attributes(ns):
         AttributeMapping(varname="object_id", 
                                  wfs_attr=f"{ns}:OBJECTID"),
         AttributeMapping(varname="albers_area_3577", 
+                         label="Albers Area (m\u00B2)",
                          predicate=Pred(GEOX.hasAreaM2, 
                                         builder=Pred.node_builder(None, [
                                             (Pred(DATA.value), "albers_area_3577"),
@@ -19,10 +20,8 @@ def get_common_attributes(ns):
                          typefunc=Decimal,
                          converter=AttributeMapping.basic_converter(lambda val: val * 1000000), #convert to m^2
                          wfs_attr=f"{ns}:AREA_ALBERS_SQKM"),
-        AttributeMapping(varname="shape_length", 
-                         typefunc=Decimal,
-                         wfs_attr=f"{ns}:Shape_Length"),
         AttributeMapping(varname="shape_area", 
+                         label="Shape Area (m\u00B2)",
                          predicate=Pred(GEOX.hasAreaM2, 
                                         builder=Pred.node_builder(None, [
                                             (Pred(DATA.value), "shape_area"),
@@ -30,6 +29,10 @@ def get_common_attributes(ns):
                                         ])),   
                          typefunc=Decimal,
                          wfs_attr=f"{ns}:Shape_Area"),
+        AttributeMapping(varname="shape_length", 
+                         label="Shape Length (m)",
+                         typefunc=Decimal,
+                         wfs_attr=f"{ns}:Shape_Length"),
     ]
 
 def get_geometry_attributes(ns): 
