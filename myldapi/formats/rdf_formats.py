@@ -22,7 +22,7 @@ class RDFXMLFormat(RDFBaseFormat):
         super().__init__(label="RDF XML Format", 
                          comment="", 
                          media_types=["application/rdf+xml", "application/rdf", "application/rdf xml"], 
-                         rdflib_format="turtle",
+                         rdflib_format="xml",
                          extensions=["xml"])
 
 class JSONLDFormat(RDFBaseFormat):
@@ -39,4 +39,4 @@ class NTFormat(RDFBaseFormat):
                          comment="", 
                          media_types=["application/n-triples", "text/ntriples", "text/n-triples", "text/plain"], 
                          rdflib_format="nt",
-                         extensions=["jsonld"])
+                         extensions=["nt"])

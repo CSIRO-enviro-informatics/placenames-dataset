@@ -196,53 +196,16 @@ class MyLDApi(object):
 
         return None 
 
-    def _get_accept_mediatypes_in_order(self, request):
-        """
-        Reads an Accept HTTP header and returns an array of Media Type string in descending weighted order
-
-        :return: List of URIs of accept profiles in descending request order
-        :rtype: list
-        """
-        if not 'Accept' in request.headers:
-            return []
-        try:
-            # split the header into individual URIs, with weights still attached
-            media_types = request.headers['Accept'].split(',')
-            # remove \s
-            media_types = [x.replace(' ', '').strip() for x in media_types]
-
-            # split off any weights and sort by them with default weight = 1
-            weighted_types = []            
-            for media_range in media_types:            
-                media_type, *params = media_range.split(";")                 
-                param_vals = {}
-                for p in params:
-                    key, *val = p.split("=")
-                    param_vals[key] = val[0] if len(val) == 1 else None
-
-                weight = float(param_vals['q']) if 'q' in param_vals else 1
-                weighted_types.append((weight, media_type))
-                     
-            # sort profiles by weight, heaviest first
-            weighted_types.sort(reverse=True)
-
-            return[x[1] for x in weighted_types]
-        except Exception as e:
-            raise ValueError(
-                f"You have requested a Media Type using an Accept header that is incorrectly formatted. Accept='{request.headers['Accept']}'")
-
     def _get_best_accept_mediatype_by_content_neg(self, request, view):
-        mediatypes_requested = self._get_accept_mediatypes_in_order(request)
+        available_types = [media_type for f in view.formats for media_type in f.media_types ]
+        best_match = accept_types.get_best_match(request.headers['Accept'], available_types)
 
-        for mediatype in mediatypes_requested:
-            #prioritise default media types, then check others
-            format = next((f for f in view.formats if f.default_media_type() == mediatype), None)
-            if not format:
-                format = next((f for f in view.formats if mediatype in f.media_types), None)    
-            if format:
-                return format
+        #prioritise default media types, then check others
+        format = next((f for f in view.formats if f.default_media_type() == best_match), None)
+        if not format:
+            format = next((f for f in view.formats if best_match in f.media_types), None)    
 
-        return None
+        return format
 
     def _get_accept_languages_in_order(self, request):
         """
