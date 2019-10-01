@@ -18,6 +18,7 @@
                         <th>View</th>
                         <th>Key</th>
                         <th>Formats</th>
+                        <th>Profile URI</th>
                         <th>Description</th>
                     </tr>
                     {% for view in register.views %}
@@ -31,7 +32,7 @@
                             {% endif %}
                         </td>
                         <td><a href="?_view={{ view.key }}">{{ view.key }}</a></td>
-                        <td>
+                        <td style="white-space: nowrap">
                             <ul class="list-unstyled">
                                 {% for f in view.formats %}
                                 <li>
@@ -43,6 +44,7 @@
                                 {% endfor %}
                             </ul>
                         </td>
+                        <td style="white-space: nowrap">{{ view.profile_uri }}</td>
                         <td>{{ view.comment }}</td>
                     </tr>
                     {% endfor %}

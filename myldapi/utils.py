@@ -47,7 +47,7 @@ def bind_common(graph):
     graph.bind('ogc', OGC)
     graph.bind('gml', GML)
     graph.bind('qb4st', QB4ST)
-    graph.bind('rdfs', QB4ST)
+    graph.bind('qb4st', QB4ST)
 
 
 def take_xml_as_string_element_converter(lxml_element):
@@ -201,3 +201,4 @@ def gml_extract_geom_to_geojson(node, recursion=0, parent_srs=None):
     else:
         raise NotImplementedError(
             "Don't know how to convert geom type: {}".format(geom.tag))
+

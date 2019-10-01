@@ -23,7 +23,8 @@ class RegisterView(View):
                          formats=[
                              HTMLFormat(template),
                              *common_rdf_formats
-                         ])
+                         ], 
+                         profile_uri="http://purl.org/linked-data/registry")
         self.reg_of_regs = reg_of_regs
 
     def get_attributes(self, uri, **kwargs):

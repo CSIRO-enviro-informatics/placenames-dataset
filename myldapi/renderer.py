@@ -7,53 +7,9 @@ from pyldapi.view import View
 from pyldapi.exceptions import ViewsFormatsException
 
 
-class Renderer(object, metaclass=ABCMeta):
-    """
-    Abstract class as a parent for classes that validate the views & formats for an API-delivered resource (typically
-    either registers or objects) and also creates an 'alternates view' for them, based on all available views & formats.
-    """
-
-    RDF_MIMETYPES = ['text/turtle', 'application/rdf+xml', 'application/ld+json', 'text/n3', 'application/n-triples']
-    RDF_SERIALIZER_MAP = {
-        "text/n3": "n3",
-        # Some common but incorrect mimetypes
-        "application/rdf+xml": "xml",
-        "application/rdf": "xml",
-        "application/rdf xml": "xml",
-        "application/ld+json": "json-ld",
-        "application/json": "json-ld",
-        "application/ld json": "json-ld",
-        "text/turtle": "turtle",
-        "text/ttl": "turtle",
-        "application/n-triples": "nt",
-        "text/ntriples": "nt",
-        "text/n-triples": "nt",
-        "text/plain": "nt",  # text/plain is the old/deprecated mimetype for n-triples
-    }
-
-    def __init__(self, request, id, register):
-        self.request = request
-        self.id = id
-
-        # get view & format for this request, flag any errors but do not except out
-        try:
-            self.view = self._get_requested_view()
-            try:
-                self.format = self._get_requested_format()
-                if self.format is None:
-                    self.format = self.views[self.view].default_format
-
-                self.language = self._get_requested_language()
-                if self.language is None:
-                    self.language = self.views[self.view].default_language
-            except ViewsFormatsException as e:
-                print(e)
-                self.vf_error = str(e)
-        except ViewsFormatsException as e:
-            print(e)
-            self.vf_error = str(e)
-
-        self.headers = dict()
+class Renderer:
+    def __init__(self, register):
+        self.register = register
 
     def _get_accept_profiles_in_order(self):
         """

@@ -5,8 +5,8 @@ from ..utils import id_from_uri, base_from_uri, bind_common, RDF_a
 
 
 class SourceView(View):
-    def __init__(self, name, comment, key, formats, source):
-        super().__init__(name, comment, key, formats)
+    def __init__(self, name, comment, key, formats, profile_uri, source ):
+        super().__init__(name, comment, key, formats, profile_uri)
         self.source = source
 
     def get_attributes(self, uri, **kwargs):

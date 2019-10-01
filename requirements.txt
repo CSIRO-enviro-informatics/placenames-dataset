@@ -5,3 +5,4 @@ pyldapi==2.1.2.post4
 # psycopg2==2.8.2
 lxml==4.4.1
 requests==2.22.0
+accept-types==0.4.1

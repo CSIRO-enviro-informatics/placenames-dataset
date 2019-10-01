@@ -13,6 +13,7 @@ class ASGSView(SourceView):
                          key="asgs",
                          comment="Basic properties conforming to the ABS ASGS Ontologoy",
                          source=source,
+                         profile_uri="http://linked.data.gov.au/def/asgs#",
                          formats=[
                               HTMLFormat(template),
                               *common_rdf_formats

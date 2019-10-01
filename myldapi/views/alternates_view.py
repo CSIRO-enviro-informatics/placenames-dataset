@@ -16,7 +16,9 @@ class AlternatesView(View):
                          formats=[
                              HTMLFormat(template),
                              *common_rdf_formats
-                         ])                        
+                         ],
+                         profile_uri="https://promsns.org/def/alt"
+                         )                        
         self.register = register
     
     def get_attributes(self, uri, **kwargs):
@@ -50,9 +52,7 @@ class AlternatesView(View):
             g.add((v_node, RDFS.label, Literal(v.name, datatype=XSD.string)))
             g.add((v_node, RDFS.comment, Literal(v.comment, datatype=XSD.string)))
             g.add((v_node, ALT.hasDefaultFormat, Literal(v.get_default_format().default_media_type(), datatype=XSD.string)))
-
-            if v.namespace is not None:
-                g.add((v_node, DCT.conformsTo, URIRef(v.namespace)))
+            g.add((v_node, DCT.conformsTo, URIRef(v.profile_uri)))
 
             for f in v.formats:
                 g.add((v_node, URIRef(DCT.term('format')), URIRef('http://w3id.org/mediatype/' + f.default_media_type())))

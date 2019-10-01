@@ -1,12 +1,13 @@
 import rdflib
 
 class View:
-    def __init__(self, name, comment, key, formats, namespace=None):
+    def __init__(self, name, comment, key, formats, profile_uri, languages=['en']):
         self.name = name
         self.comment = comment
         self.key = key
         self.formats = formats
-        self.namespace = namespace
+        self.profile_uri = profile_uri
+        self.languages = languages
 
         if not isinstance(formats, list):
             self.formats = [formats]
@@ -28,3 +29,6 @@ class View:
 
     def get_format_by_extension(self, ext):
         return next((f for f in self.formats if ext in f.extensions), None)
+
+    def get_default_language(self):
+        return self.languages[0]
