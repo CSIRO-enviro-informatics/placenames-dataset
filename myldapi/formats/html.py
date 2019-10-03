@@ -11,7 +11,7 @@ class HTMLFormat(Format):
                          "html")
         self.template = template
 
-    def render_response(self, uri, view, lang, parent_register, request, **kwargs):
+    def render_content(self, uri, view, lang, parent_register, request, **kwargs):
         props = view.get_attributes(uri, **kwargs)        
 
         html_vars = {
@@ -34,5 +34,5 @@ class HTMLFormat(Format):
                                                  total=item_count, 
                                                  css_framework="bootstrap4")
 
-        return Response(render_template(self.template, **html_vars), mimetype=self.default_media_type())
+        return render_template(self.template, **html_vars)
 

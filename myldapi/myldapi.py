@@ -78,6 +78,8 @@ class MyLDApi(object):
         }
 
         return format.render_response(uri, view, lang, register, request, **extras)
+        
+
 
     # this function is here to allow linkdata.gov.au redirect to be cleaner
     def show_object(self):

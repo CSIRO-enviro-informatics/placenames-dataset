@@ -10,7 +10,7 @@ class JSONFormat(Format):
                          "application/json",
                          "json")
 
-    def render_response(self, uri, view, lang, parent_register, request, **kwargs):
+    def render_content(self, uri, view, lang, parent_register, request, **kwargs):
         attr_map = view.get_attributes(uri, **kwargs)
         deets = {}
 
@@ -42,5 +42,5 @@ class JSONFormat(Format):
         #     deets[am.varname] = obj
 
 
-        return Response(json.dumps(deets, indent=4), mimetype=self.default_media_type())
+        return json.dumps(deets, indent=4)
 

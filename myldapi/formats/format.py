@@ -1,3 +1,4 @@
+from flask import make_response
 # -*- coding: utf-8 -*-
 class Format:
     def __init__(self, label, comment, media_types, extensions=[]):
@@ -15,5 +16,14 @@ class Format:
     def default_media_type(self):
         return self.media_types[0]
 
+    def render_content(self, uri, view, lang, parent_register, request, **kwargs):
+        raise NotImplementedError('Must implement the render_content method')
+
     def render_response(self, uri, view, lang, parent_register, request, **kwargs):
-        raise NotImplementedError('Must implement the render_response method')
+        content = self.render_content(uri, view, lang, parent_register, request, **kwargs)
+        headers = {
+            'Content-Type': self.default_media_type(),
+            'Profile': f"<{view.profile_uri}>",
+            # 'Language': lang #set the language eventually
+        }
+        return make_response(content, headers)
