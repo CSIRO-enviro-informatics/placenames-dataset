@@ -13,15 +13,17 @@ class MyLDApi(object):
         self.registers = registers
         self.dataset_name = dataset_name
         self.dataset_uri = dataset_uri
+
+        self.rofr = RegisterOfRegisters(self.dataset_uri, self.registers[:], name=self.dataset_name)
+        self.registers.append(self.rofr)
+
         if app is not None:
             self.init_app(app)
+
 
     def init_app(self, app):
         app.config.setdefault("APP_TITLE", "MYLDAPI App")
         app.config.setdefault("CITATION_TEMPLATE","{type} {id}. {type} from the {dataset}. {uri}")
-
-        self.rofr = RegisterOfRegisters(self.dataset_uri, self.registers[:], name=self.dataset_name)
-        self.registers.append(self.rofr)
 
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
@@ -243,9 +245,12 @@ class MyLDApi(object):
         return None  # if no match found
 
     def export_all(self, output_dir, view_key=None, format_type="application/n-triples", lang=None, limit=None, batch_size=1000):
-        for register in self.registers:
-            if isinstance(register, RegisterOfRegisters):
-                continue
+        # sort of a temp parent to register to run through the render pipeline
+        dummy_reg = RegisterOfRegisters("http://dummydata/root",[self.rofr], name="Root Register")
+        export_regs = self.registers[:]
+        export_regs.append(dummy_reg)
+
+        for register in export_regs:
             print(f"Exporting Register #### {register.name}")            
             pages = math.ceil(register.get_count() / batch_size)
             count = 0
