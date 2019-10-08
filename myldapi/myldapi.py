@@ -1,4 +1,5 @@
 import os
+import math
 import accept_types
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
 from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, PACKAGE_NAME, id_from_uri, base_from_uri
@@ -48,7 +49,6 @@ class MyLDApi(object):
 
         app.register_blueprint(self.blueprint)
     
-
     def show_about(self):
         return render_template(DEFAULT_TEMPLATE_ABOUT)
 
@@ -60,8 +60,7 @@ class MyLDApi(object):
         dummy_reg = RegisterOfRegisters("http://dummydata/root",[register])
         view, format, lang = self.get_view_format_and_lang(request, dummy_reg)
 
-        return format.render_response(self.rofr.get_uri(), view, lang, dummy_reg, request)
-
+        return format.render_response(self.rofr.get_uri(), view, lang, dummy_reg)
 
     def show_register_object(self, id):
         reg_endpoint = request.endpoint.split(".", 1)[1]
@@ -77,10 +76,8 @@ class MyLDApi(object):
             "per_page": int(per_page) if per_page else 20,
         }
 
-        return format.render_response(uri, view, lang, register, request, **extras)
+        return format.render_response(uri, view, lang, register, **extras)
         
-
-
     # this function is here to allow linkdata.gov.au redirect to be cleaner
     def show_object(self):
         uri = request.args.get('uri', type=str, default=None)
@@ -244,3 +241,22 @@ class MyLDApi(object):
                 return lang
 
         return None  # if no match found
+
+    def export_all(self, output_dir, view_key=None, format_type="application/n-triples", lang=None, limit=None, batch_size=1000):
+        for register in self.registers:
+            if isinstance(register, RegisterOfRegisters):
+                continue
+            print(f"Exporting Register #### {register.name}")            
+            pages = math.ceil(register.get_count() / batch_size)
+            count = 0
+            for page in range(1, pages+1):
+                print(f"-- Page {page} of {pages} --")            
+                register_dir = os.path.join(output_dir, register.path)
+                if not os.path.exists(register_dir):
+                    os.makedirs(register_dir)                    
+                view = next((v for v in register.views if v.key == view_key), register.get_default_view())
+                format = next((f for f in view.formats if format_type == f.default_media_type()), view.get_default_format())
+                register.export(register_dir, view, format, lang, page, batch_size)
+                count += batch_size
+                if count >= limit:
+                    break

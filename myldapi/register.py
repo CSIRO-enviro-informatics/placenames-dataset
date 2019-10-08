@@ -35,6 +35,29 @@ class Register:
     def list_uris(self, page=1, per_page=20):
         raise NotImplementedError('Must implement the get_ids method')
 
+    def export(self, output_dir, view=None, format=None, lang=None, page=1, per_page=20):
+        if view == None:
+            view = self.get_default_view()
+        if format == None:
+            format = view.get_default_format()
+        if lang == None: 
+            lang = view.get_default_language()
+
+        extras = {
+            "page": page,
+            "per_page": per_page,
+        }
+
+        uris = self.list_uris(page, per_page)        
+        for uri in uris:
+            print(f"Exporting: {uri}")            
+            content = format.render_content(uri, view, lang, self, **extras)
+            filename = f"{id_from_uri(uri)}.{format.default_extension()}"
+            output_file = os.path.join(output_dir, filename)
+            with open(output_file, "w") as f:
+                f.write(content)
+        
+
     def can_resolve_uri(self, uri):
         base = base_from_uri(uri)
         return base == self.base_uri

@@ -16,11 +16,14 @@ class Format:
     def default_media_type(self):
         return self.media_types[0]
 
-    def render_content(self, uri, view, lang, parent_register, request, **kwargs):
+    def default_extension(self):
+        return self.extensions[0]
+
+    def render_content(self, uri, view, lang, parent_register, **kwargs):
         raise NotImplementedError('Must implement the render_content method')
 
-    def render_response(self, uri, view, lang, parent_register, request, **kwargs):
-        content = self.render_content(uri, view, lang, parent_register, request, **kwargs)
+    def render_response(self, uri, view, lang, parent_register, **kwargs):
+        content = self.render_content(uri, view, lang, parent_register, **kwargs)
         headers = {
             'Content-Type': self.default_media_type(),
             'Profile': f"<{view.profile_uri}>",

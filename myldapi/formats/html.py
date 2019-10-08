@@ -11,7 +11,7 @@ class HTMLFormat(Format):
                          "html")
         self.template = template
 
-    def render_content(self, uri, view, lang, parent_register, request, **kwargs):
+    def render_content(self, uri, view, lang, parent_register, **kwargs):
         props = view.get_attributes(uri, **kwargs)        
 
         html_vars = {
