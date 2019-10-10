@@ -27,9 +27,10 @@ class MyLDApi(object):
 
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
-                                   template_folder="templates",
-                                   static_url_path=f"/{PACKAGE_NAME}/static")
+                                   static_url_path=f"/{PACKAGE_NAME}/static",
+                                   template_folder="templates")
 
+        self.blueprint.add_url_rule("/favicon.ico", "favicon", self.favicon)
         self.blueprint.add_url_rule("/object", "object", self.show_object)
         self.blueprint.add_url_rule("/about", "about", self.show_about)
 
@@ -79,7 +80,10 @@ class MyLDApi(object):
         }
 
         return format.render_response(uri, view, lang, register, **extras)
-        
+
+    def favicon(self):
+        return redirect(url_for('.static', filename='favicon.ico'), code=302)
+
     # this function is here to allow linkdata.gov.au redirect to be cleaner
     def show_object(self):
         uri = request.args.get('uri', type=str, default=None)

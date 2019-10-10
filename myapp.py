@@ -11,7 +11,7 @@ from asgs.states import StateOrTerritory
 import asgs.config
 from myldapi import MyLDApi
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='asgs/static', template_folder='asgs/templates')
 app.config.from_object(asgs.config)
 
 myapi = MyLDApi(app, asgs.config.DATASET_NAME, asgs.config.DATASET_URI, [
