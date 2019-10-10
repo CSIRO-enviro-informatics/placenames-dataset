@@ -48,14 +48,8 @@ class Register:
             "per_page": per_page,
         }
 
-        uris = self.list_uris(page, per_page)        
-        for uri in uris:
-            print(f"Exporting: {uri}")            
-            content = format.render_content(uri, view, lang, self, **extras)
-            filename = f"{id_from_uri(uri)}.{format.default_extension()}"
-            output_file = os.path.join(output_dir, filename)
-            with open(output_file, "w") as f:
-                f.write(content)
+        uri_list = self.list_uris(page, per_page)        
+        format.export_many(output_dir, uri_list, view, lang, self, **extras)
         
 
     def can_resolve_uri(self, uri):

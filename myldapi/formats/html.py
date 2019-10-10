@@ -11,8 +11,14 @@ class HTMLFormat(Format):
                          "html")
         self.template = template
 
-    def render_content(self, uri, view, lang, parent_register, **kwargs):
-        props = view.get_attributes(uri, **kwargs)        
+    def get_details(self, uri, view, lang, parent_register, **kwargs):
+        return view.get_attributes(uri, **kwargs)        
+
+    def get_many_details(self, uri_list, view, lang, parent_register, **kwargs):
+        return view.get_many_attributes(uri_list, **kwargs)
+
+    def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
+        props = details
 
         html_vars = {
             "uri": uri,
@@ -35,4 +41,3 @@ class HTMLFormat(Format):
                                                  css_framework="bootstrap4")
 
         return render_template(self.template, **html_vars)
-

@@ -10,8 +10,14 @@ class JSONFormat(Format):
                          "application/json",
                          "json")
 
-    def render_content(self, uri, view, lang, parent_register, **kwargs):
-        attr_map = view.get_attributes(uri, **kwargs)
+    def get_details(self, uri, view, lang, parent_register, **kwargs):
+        return view.get_attributes(uri, **kwargs)        
+
+    def get_many_details(self, uri_list, view, lang, parent_register, **kwargs):
+        return view.get_many_attributes(uri_list, **kwargs)
+
+    def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
+        attr_map = details
         deets = {}
 
         # Just the values

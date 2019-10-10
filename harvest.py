@@ -21,4 +21,4 @@ myapi = MyLDApi(None, asgs.config.DATASET_NAME, asgs.config.DATASET_URI, [
 if __name__ == "__main__":        
     path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(path, "export")
-    myapi.export_all(path, limit=10, batch_size=10)
+    myapi.export_all(path, limit=10000, batch_size=1000)

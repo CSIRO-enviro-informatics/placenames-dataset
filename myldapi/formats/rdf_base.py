@@ -8,8 +8,14 @@ class RDFBaseFormat(Format):
         super().__init__(label, comment, media_types, extensions=extensions)
         self.rdflib_format = rdflib_format
 
-    def render_content(self, uri, view, lang, parent_register, **kwargs):
-        graph = view.get_graph(uri, **kwargs)
+    def get_details(self, uri, view, lang, parent_register, **kwargs):
+        return view.get_graph(uri, **kwargs)        
+
+    def get_many_details(self, uri_list, view, lang, parent_register, **kwargs):
+        return view.get_many_graphs(uri_list, **kwargs)
+
+    def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
+        graph = details
 
         b_response = graph.serialize(format=self.rdflib_format, encoding='utf-8')
         

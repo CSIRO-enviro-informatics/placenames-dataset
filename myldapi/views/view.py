@@ -32,3 +32,9 @@ class View:
 
     def get_default_language(self):
         return self.languages[0]
+
+    def get_many_attributes(self, uri_list, **kwargs):
+        return [(uri, self.get_attributes(uri, **kwargs)) for uri in uri_list]
+
+    def get_many_graphs(self, uri_list, **kwargs):
+        return [(uri, self.get_graph(uri, **kwargs)) for uri in uri_list]

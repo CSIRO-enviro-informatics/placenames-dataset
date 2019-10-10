@@ -17,6 +17,18 @@
             },
         },     
         {
+            "name": "Harvest",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/harvest.py",
+            "console": "integratedTerminal",
+            "args": [
+            ],
+            "env": {
+                // "PYTHONPATH": "${workspaceFolder}"
+            },
+        },  
+                {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",

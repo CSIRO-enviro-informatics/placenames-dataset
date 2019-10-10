@@ -70,10 +70,12 @@ def gml_extract_geom_to_geojson(node, recursion=0, parent_srs=None):
     :return:
     """
 
-    ns = {
-        'wfs': 'http://www.opengis.net/wfs/2.0',
-        'gml': "http://www.opengis.net/gml/3.2"
-    }
+    # ns = {
+    #     'wfs': 'http://www.opengis.net/wfs/2.0',
+    #     'gml': "http://www.opengis.net/gml/3.2"
+    # }
+
+    ns = node.nsmap
 
     if recursion >= 10:
         return []

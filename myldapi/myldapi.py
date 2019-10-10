@@ -259,8 +259,9 @@ class MyLDApi(object):
                 register_dir = os.path.join(output_dir, register.path)
                 if not os.path.exists(register_dir):
                     os.makedirs(register_dir)                    
-                view = next((v for v in register.views if v.key == view_key), register.get_default_view())
-                format = next((f for f in view.formats if format_type == f.default_media_type()), view.get_default_format())
+                view = register.get_view(view_key) or register.get_default_view()
+                format = view.get_format(format_type) or view.get_default_format()
+                
                 register.export(register_dir, view, format, lang, page, batch_size)
                 count += batch_size
                 if count >= limit:
