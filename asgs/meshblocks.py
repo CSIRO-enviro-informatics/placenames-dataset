@@ -66,7 +66,6 @@ class Meshblock(SourceRegister):
             ns_map={
                 f"{ns}": "WFS"
             },
-            count=MESHBLOCK_COUNT,
             attr_map=attribute_mappings)
 
         super().__init__(name = "Register of ASGS Meshblocks",

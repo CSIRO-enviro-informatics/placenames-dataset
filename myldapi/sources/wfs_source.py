@@ -58,11 +58,10 @@ class WFSSource(Source):
         if self.count:
             return self.count
 
-        raise NotImplemented("No way to get dynamic count yet, must set count manually")
-        # url = self.query_for_count()
-        # resp = requests.get(url)
-        # tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
-        # return tree.xpath('//{}/text()'.format(self.id_prop), namespaces=tree.getroot().nsmap)
+        url = self.query_for_count()
+        resp = requests.post(self.endpoint, data=url)
+        tree = etree.parse(BytesIO(resp.content))  # type lxml._ElementTree
+        return int(tree.getroot().attrib['numberOfFeatures'])
 
     def get_ids(self, startindex, count):
         if startindex + count > self.get_count():
