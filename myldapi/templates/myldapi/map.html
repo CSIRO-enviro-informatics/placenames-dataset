@@ -1,0 +1,33 @@
+{% set geojson_am, geojson_v = find_prop(attr_map, 'geojson') %}
+{% if geojson_v %}
+{% set geojson = geojson_v.value %}
+<section class="myldapi-section">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9">
+            <div id="myldapi_map" style="height: 400px;"></div>
+        </div>
+    </div>
+    <script>
+        var el = $('<button type="button" class="btn btn-primary" style="position: fixed; left: -100px; top:-100px">Button</button>').appendTo('body');
+        var polygonColor = $(el[0]).css('background-color');
+        $(el).remove()
+
+        var map = L.map('myldapi_map').setView({ lat: -26.997043034435787, lng: 134.41188812255862 }, 4);
+
+        var Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+            maxZoom: 16
+        }).addTo(map);
+
+        var geojsonFeature = {{ geojson| tojson | safe }};
+
+        var geoLayer = L.Proj.geoJson(geojsonFeature, {
+            style: {
+                color: polygonColor,
+            }
+        }).addTo(map);
+
+        map.fitBounds(geoLayer.getBounds(), { padding: [50, 50] })
+    </script>
+</section>
+{% endif %}

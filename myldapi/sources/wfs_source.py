@@ -8,13 +8,14 @@ from ..attr_mapping import AttributeMapping
 
 
 class WFSSource(Source):
-    def __init__(self, endpoint, typename, id_prop, ns_map, attr_map, count=None):
+    def __init__(self, endpoint, typename, id_prop, ns_map, attr_map, count=None, default_crs="EPSG:4326"):
         self.endpoint = endpoint
         self.ns_map = ns_map
         self.attr_map = attr_map
         self.typename = typename
         self.id_prop = id_prop
         self.count = count
+        self.default_crs = default_crs
 
     def get_many_object_details(self, id_list):
         obj_attr_list = []
@@ -44,8 +45,8 @@ class WFSSource(Source):
         elif len(results) == 0:
             value = None
         else:
-            if hasattr(am, "element_converter"):
-                result = am.element_converter(results[0])
+            if hasattr(am, "wfs_element_converter"):
+                result = am.wfs_element_converter(results[0], self.default_crs)
             else:
                 result = results[0].text #default to just take the te
             value = am.create_value(result)
@@ -128,7 +129,7 @@ xsi:schemaLocation="http://www.opengis.net/wfs
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.opengis.net/wfs
                       http://schemas.opengis.net/wfs/1.0.0/WFS-basic.xsd">
-  <wfs:Query typeNames="{self.typename}">
+  <wfs:Query typeNames="{self.typename}" srsName="{self.default_crs}">
         {property_filter}
         <ogc:Filter>
             {query}

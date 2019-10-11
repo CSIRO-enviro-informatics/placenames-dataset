@@ -20,3 +20,16 @@ class ASGSView(SourceView):
                          ])
 
 
+class LociView(SourceView):
+    def __init__(self, source, template=None):
+        if template == None:
+            template = DEFAULT_TEMPLATE_OBJECT
+
+        super().__init__(name="ASGS Loci View",
+                         key="loci",
+                         comment="A stripped back version of the ASGS for the Loci-Cache",
+                         source=source,
+                         profile_uri="http://linked.data.gov.au/def/loci_dataset",
+                         formats=[
+                              *common_rdf_formats
+                         ])

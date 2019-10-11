@@ -1,10 +1,7 @@
-import os
-import math
-import accept_types
+import os, math, accept_types
 from flask import current_app, _app_ctx_stack, Blueprint, request, redirect, url_for, Response, render_template
 from .utils import DEFAULT_TEMPLATE_HOME, DEFAULT_TEMPLATE_ABOUT, check_config, PACKAGE_NAME, id_from_uri, base_from_uri
 from .rofr import RegisterOfRegisters
-
 
 class MyLDApi(object):
     def __init__(self, app, dataset_name, dataset_uri, registers):
@@ -24,11 +21,11 @@ class MyLDApi(object):
     def init_app(self, app):
         app.config.setdefault("APP_TITLE", "MYLDAPI App")
         app.config.setdefault("CITATION_TEMPLATE","{type} {id}. {type} from the {dataset}. {uri}")
-
+        
         self.blueprint = Blueprint(PACKAGE_NAME, __name__,
                                    static_folder="static",
                                    static_url_path=f"/{PACKAGE_NAME}/static",
-                                   template_folder="templates")
+                                   template_folder="templates")                        
 
         self.blueprint.add_url_rule("/favicon.ico", "favicon", self.favicon)
         self.blueprint.add_url_rule("/object", "object", self.show_object)

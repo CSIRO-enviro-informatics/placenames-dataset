@@ -39,7 +39,7 @@ def get_geometry_attributes(ns):
     return [
         AttributeMapping(varname="geometry",
                          wfs_attr=f"{ns}:Shape",
-                         element_converter=take_xml_as_string_element_converter,
+                         wfs_element_converter=take_xml_as_string_element_converter,
                          predicate=Pred(GEO.hasGeometry, 
                                         builder=Pred.node_builder(None, [
                                             (Pred(RDF_a), GEO.Geometry),
@@ -48,8 +48,7 @@ def get_geometry_attributes(ns):
                          ),
         AttributeMapping(varname="geojson",
                          wfs_attr=f"{ns}:Shape",
-                         element_converter=gml_extract_geom_to_geojson,
+                         wfs_element_converter=lambda node, crs: gml_extract_geom_to_geojson(node, parent_srs=crs),
                          )
     ]
-
-
+    

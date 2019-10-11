@@ -1,4 +1,4 @@
-from .asgs_view import ASGSView
+from .views import ASGSView
 from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, STATE_COUNT
@@ -27,6 +27,7 @@ class StateOrTerritory(SourceRegister):
                 f"{ns}": "WFS"
             },
             count=STATE_COUNT,
+            default_crs="EPSG:3857",
             attr_map=attribute_mappings)
 
         super().__init__(name = "Register of ASGS States and Territories",

@@ -1,7 +1,6 @@
-import rdflib
+import rdflib, lxml
 from rdflib import Namespace
 from rdflib.namespace import RDF, RDFS, OWL, XSD
-import lxml
 
 GEO = Namespace("http://www.opengis.net/ont/geosparql#")
 GEOX = Namespace("http://linked.data.gov.au/def/geox#")
@@ -38,7 +37,7 @@ def check_config(name, app):
         raise ValueError(f"{name} must be set in the config pre-initialistaion of {PACKAGE_NAME}")
 
 def find_prop(pairs, varname):
-    return next(((am, v) for am, v in pairs if am.varname == varname), None)
+    return next(((am, v) for am, v in pairs if am.varname == varname), (None, None))
 
 def bind_common(graph):
     graph.bind('geo', GEO)
@@ -50,12 +49,10 @@ def bind_common(graph):
     graph.bind('qb4st', QB4ST)
 
 
-def take_xml_as_string_element_converter(lxml_element):
+def take_xml_as_string_element_converter(lxml_element, crs):
     if len(lxml_element) != 1:
         raise ValueError("Only works with a single child")
     return lxml.etree.tostring(lxml_element[0], xml_declaration=False, pretty_print=True, encoding=str)
-
-
 
 def chunks(source, length):
     """Yield successive n-sized chunks from l."""

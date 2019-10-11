@@ -1,4 +1,4 @@
-from .asgs_view import ASGSView
+from .views import ASGSView
 from myldapi import SourceRegister, AttributeMapping, AttributeMappingPredicate as Pred
 from myldapi.sources import WFSSource
 from .config import ASGS, DATASET_URI, MESHBLOCK_COUNT
@@ -66,6 +66,7 @@ class Meshblock(SourceRegister):
             ns_map={
                 f"{ns}": "WFS"
             },
+            default_crs="EPSG:3857",
             attr_map=attribute_mappings)
 
         super().__init__(name = "Register of ASGS Meshblocks",

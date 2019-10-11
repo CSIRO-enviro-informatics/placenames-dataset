@@ -1,5 +1,14 @@
 {% extends "myldapi/layout.html" %}
 
+{% block extra_head_css%}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+{% endblock %}
+{% block extra_head_javascript%}
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="{{ url_for('myldapi.static', filename='proj4-compressed.js') }}"></script>
+<script src="{{ url_for('myldapi.static', filename='proj4leaflet.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <section class="myldapi-section">
     <div class="row">
@@ -8,14 +17,8 @@
             <p class="lead">{{ uri }}</p>
         </div>
     </div>
-    {%if geometry %}
-    <!-- if geometry is passed, show a map of it -->
-    <div class="row">
-        <div class="col-12">
-            <div id="map">Show a map of 'geometry'</div>
-        </div>
-    </div>
-    {% endif %}
+
+    {% include "myldapi/map.html" %}
 
     <div class="row">
         <!-- <div class="col-12">
