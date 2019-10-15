@@ -29,7 +29,16 @@ class AttributeMapping:
             return AttributeMappingValue(value, label, uri)
 
         return converter
-            
+
+    @staticmethod
+    def base_uri_converter(base_uri):
+        def converter(value):
+            id = value
+            uri = base_uri + id
+            return AttributeMappingValue(value, label, uri)
+
+        return converter
+
     @staticmethod
     def format_converter(template):
         """Takes a string template and applies the value to it"""
