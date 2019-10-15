@@ -27,7 +27,7 @@ class RegisterView(View):
                          profile_uri="http://purl.org/linked-data/registry")
         self.reg_of_regs = reg_of_regs
 
-    def get_attributes(self, uri, **kwargs):
+    def get_attributes(self, uri, parent_register, **kwargs):
         result = []
         page, per_page = self.get_page_args(**kwargs)
 
@@ -51,7 +51,7 @@ class RegisterView(View):
                        AttributeMappingValue(register.get_route_endpoint(), register.get_route_endpoint())))
         return result
 
-    def get_graph(self, uri, **kwargs):
+    def get_graph(self, uri, parent_register, **kwargs):
         """return a RDFLIB graph of the object"""
         g = rdflib.Graph()
         bind_common(g)

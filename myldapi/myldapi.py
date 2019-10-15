@@ -265,5 +265,5 @@ class MyLDApi(object):
                 
                 register.export(register_dir, view, format, lang, page, batch_size)
                 count += batch_size
-                if count >= limit:
+                if limit and count >= limit:
                     break

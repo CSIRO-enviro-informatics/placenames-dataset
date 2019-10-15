@@ -16,7 +16,7 @@ class Source():
         """Get a list of ids from the source"""
         raise NotImplementedError('Must implement the get_ids method')
 
-    def get_many_object_details(self, uri_list):
+    def get_many_object_details(self, id_list):
         """Get a list of ids from the source"""
         raise NotImplementedError('Must implement the get_ids method')
 

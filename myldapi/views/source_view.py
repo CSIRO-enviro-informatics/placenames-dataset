@@ -10,19 +10,21 @@ class SourceView(View):
         super().__init__(name, comment, key, formats, profile_uri)
         self.source = source
 
-    def get_attributes(self, uri, **kwargs):        
+    def get_attributes(self, uri, parent_register, **kwargs):        
         return self.source.get_object_details(id_from_uri(uri))
 
-    def get_graph(self, uri, **kwargs):
+    def get_graph(self, uri, parent_register, **kwargs):
         attr_values = self.source.get_object_details(id_from_uri(uri))
-        return self.graph_from_attributes(uri, attr_values)
+        g = self.graph_from_attributes(uri, attr_values)
+        g.add((URIRef(uri), RDF_a, URIRef(parent_register.type_uri)))
+        return g
 
     def graph_from_attributes(self, uri, attr_values):
         g = rdflib.Graph()
         bind_common(g)
 
         for am, val in attr_values:
-            if am.predicate:
+            if am.predicate and val:
                 v = URIRef(val.uri) if val.uri else Literal(val.value)
                 am.predicate.add_to_graph(g, uri, v, attr_values)
 

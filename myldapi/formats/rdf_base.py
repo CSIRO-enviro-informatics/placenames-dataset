@@ -9,10 +9,10 @@ class RDFBaseFormat(Format):
         self.rdflib_format = rdflib_format
 
     def get_details(self, uri, view, lang, parent_register, **kwargs):
-        return view.get_graph(uri, **kwargs)        
+        return view.get_graph(uri, parent_register, **kwargs)        
 
     def get_many_details(self, uri_list, view, lang, parent_register, **kwargs):
-        return view.get_many_graphs(uri_list, **kwargs)
+        return view.get_many_graphs(uri_list, parent_register, **kwargs)
 
     def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
         graph = details

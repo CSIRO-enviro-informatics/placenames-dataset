@@ -12,11 +12,11 @@ class View:
         if not isinstance(formats, list):
             self.formats = [formats]
     
-    def get_attributes(self, uri, **kwargs):
+    def get_attributes(self, uri, parent_register, **kwargs):
         """return a dictionary of object attributes"""
         raise NotImplementedError('Must implement the get_attributes method')
 
-    def get_graph(self, uri, **kwargs):
+    def get_graph(self, uri, parent_register, **kwargs):
         """return a RDFLIB graph of the object"""
         raise NotImplementedError('Must implement the get_graph method')
 
@@ -33,8 +33,8 @@ class View:
     def get_default_language(self):
         return self.languages[0]
 
-    def get_many_attributes(self, uri_list, **kwargs):
-        return [(uri, self.get_attributes(uri, **kwargs)) for uri in uri_list]
+    def get_many_attributes(self, uri_list, parent_register, **kwargs):
+        return [(uri, self.get_attributes(uri, parent_register, **kwargs)) for uri in uri_list]
 
-    def get_many_graphs(self, uri_list, **kwargs):
-        return [(uri, self.get_graph(uri, **kwargs)) for uri in uri_list]
+    def get_many_graphs(self, uri_list, parent_register,  **kwargs):
+        return [(uri, self.get_graph(uri, parent_register, **kwargs)) for uri in uri_list]

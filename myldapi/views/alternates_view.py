@@ -21,7 +21,7 @@ class AlternatesView(View):
                          )                        
         self.register = register
     
-    def get_attributes(self, uri, **kwargs):
+    def get_attributes(self, uri, parent_register, **kwargs):
         result = []                
 
         # list_mapping = AttributeMapping("views", f"Views for {self.register.type_name}", typefunc=list)
@@ -33,7 +33,7 @@ class AlternatesView(View):
 
         return result
         
-    def get_graph(self, uri, **kwargs):
+    def get_graph(self, uri, parent_register, **kwargs):
         """return a RDFLIB graph of the object"""
         g = rdflib.Graph()
         bind_common(g)

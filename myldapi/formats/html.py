@@ -12,10 +12,10 @@ class HTMLFormat(Format):
         self.template = template
 
     def get_details(self, uri, view, lang, parent_register, **kwargs):
-        return view.get_attributes(uri, **kwargs)        
+        return view.get_attributes(uri, parent_register, **kwargs)        
 
     def get_many_details(self, uri_list, view, lang, parent_register, **kwargs):
-        return view.get_many_attributes(uri_list, **kwargs)
+        return view.get_many_attributes(uri_list, parent_register, **kwargs)
 
     def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
         props = details

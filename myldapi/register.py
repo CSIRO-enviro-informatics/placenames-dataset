@@ -19,16 +19,6 @@ class Register:
         if self.base_uri[-1] == "/":
             raise ValueError("base_uri must not have trailing '/' ")
 
-    def get_graph_for(self, uri, view=None):
-        # return an RDF graph representing the full object, which will be filtered by a Profile
-        objectId = id_from_uri(uri)
-        return self.get_graph_for_id(objectId)
-
-    def get_graph_for_id(self, id, view=None):
-        if view == None:
-            view = self.get_default_view()
-        return view.get_graph()
-
     def get_label_for(self, id):
         return f"{self.type_name} #{str(id)}"
 

@@ -3,40 +3,55 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [       
+    "configurations": [
         {
             "name": "Python: Terminal (integrated)",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": [
-            ],
+            "args": [],
             "env": {
                 // "PYTHONPATH": "${workspaceFolder}"
             },
-        },     
+        },
         {
             "name": "Harvest",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/harvest.py",
             "console": "integratedTerminal",
-            "args": [
-            ],
+            "args": [],
             "env": {
                 // "PYTHONPATH": "${workspaceFolder}"
             },
-        },  
-                {
-            "name": "Python: Flask",
+        },
+        {
+            "name": "Python: Flask ASGS",
             "type": "python",
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "myapp.py",
+                "FLASK_APP": "asgs_app.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "0"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                // "--no-reload"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "Python: Flask GNAF",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "gnaf_app.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "0",
             },
             "args": [
                 "run",
