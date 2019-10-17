@@ -88,6 +88,8 @@ class AttributeMappingPredicate:
         def builder(g, obj_uri, pred, rdf_term_val, attr_map_vals):
             if not uri:
                 node = BNode()
+            elif isinstance(uri, URIRef):
+                pass
             elif uri.startswith("http"):
                 node = URIRef(uri)
             else: #property mapping
