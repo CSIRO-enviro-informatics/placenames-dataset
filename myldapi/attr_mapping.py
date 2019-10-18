@@ -61,6 +61,8 @@ class AttributeMappingValue:
         self.value = value
         self.label = label
         self.uri = uri
+        if not self.uri and isinstance(self.value, str) and self.value.startswith("http"):
+            self.uri = self.value
 
 class AttributeMappingPredicate:
     def __init__(self, uri, inverse=False, comment=None, builder=None):

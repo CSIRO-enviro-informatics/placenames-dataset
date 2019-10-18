@@ -38,6 +38,7 @@ class AddressSite(SourceRegister):
                 AttributeMapping(varname="gnafType", 
                                  label="GNAF Type",
                                  col_name="gnaf.address_site.address_type",
+                                 #need to convert to uri from the appropriate other col
                                  predicate=Pred(GNAF.gnafType)),
                 AttributeMapping(varname="name", 
                                  label="Name",

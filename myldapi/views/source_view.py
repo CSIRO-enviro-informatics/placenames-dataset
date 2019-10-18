@@ -1,6 +1,6 @@
 import rdflib
 import urllib
-from rdflib import URIRef, Literal
+from rdflib import URIRef, Literal, BNode
 from .view import View
 from ..utils import id_from_uri, base_from_uri, bind_common, RDF_a
 
@@ -19,14 +19,22 @@ class SourceView(View):
         g.add((URIRef(uri), RDF_a, URIRef(parent_register.type_uri)))
         return g
 
-    def graph_from_attributes(self, uri, attr_values):
-        g = rdflib.Graph()
-        bind_common(g)
+    def graph_from_attributes(self, uri, attr_values, g=None):
+        if not g:
+            g = rdflib.Graph()
+            bind_common(g)
 
         for am, val in attr_values:
             if am.predicate and val:
-                v = URIRef(val.uri) if val.uri else Literal(val.value)
-                am.predicate.add_to_graph(g, uri, v, attr_values)
+                if am.child_attrs:                    
+                    for child_attr_vals in val:
+                        #create a new node, might want to use a property of am here so not just blank
+                        node = BNode()
+                        self.graph_from_attributes(node, child_attr_vals, g)
+                        am.predicate.add_to_graph(g, uri, node, attr_values)
+                else:                    
+                    v = URIRef(val.uri) if val.uri else Literal(val.value)
+                    am.predicate.add_to_graph(g, uri, v, attr_values)
 
         return g
 
