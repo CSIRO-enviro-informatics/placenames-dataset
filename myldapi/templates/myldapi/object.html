@@ -1,5 +1,48 @@
 {% extends "myldapi/layout.html" %}
 
+{% macro render_attr_vals(attr_vals) %}
+    <dl class="row">
+    {% for am, value in attr_vals %}            
+        {% if am.label  %}
+            <dt class="col-sm-3">
+                {% if am.predicate.pred_uri %}
+                    <a title="{{ am.predicate.comment }}" href="{{ am.predicate.pred_uri }}">{{ am.label }}</a>
+                {% else %}
+                    {{ am.label }}
+                {% endif %}
+            </dt>
+            <dd class="col-sm-9">
+                {% if am.child_attrs %}
+                {% else %}
+                    {% if value.uri %}
+                        <a href="{{ value.uri }}">
+                            {% if value.label %}
+                                {{ value.label }}
+                            {% else %}
+                                {{ value.value }}
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        {% if value.label %}
+                            {{ value.label }}
+                        {% else %}
+                            {{ value.value }}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </dd>        
+            {% if am.child_attrs %}
+                <div class="object-indent">
+                {% for child_attr_vals in value %}            
+                    {{ render_attr_vals(child_attr_vals) }}
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    </dl>
+{% endmacro %}
+
 {% block extra_head_css%}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
 {% endblock %}
@@ -20,39 +63,9 @@
 
     {% include "myldapi/map.html" %}
 
-    <div class="row">
-        <!-- <div class="col-12">
-            <h3>Attributes</h3>
-        </div> -->
-        {% for item, value in attr_map %}
-            {% if item.label  %}
-            <dt class="col-sm-3">
-                {% if item.predicate.pred_uri %}
-                    <a title="{{ item.predicate.comment }}" href="{{ item.predicate.pred_uri }}">{{ item.label }}</a>
-                {% else %}
-                    {{ item.label }}
-                {% endif %}
-            </dt>
-            <dd class="col-sm-9">
-                {% if value.uri %}
-                    <a href="{{ value.uri }}">
-                        {% if value.label %}
-                            {{ value.label }}
-                        {% else %}
-                            {{ value.value }}
-                        {% endif %}
-                    </a>
-                {% else %}
-                    {% if value.label %}
-                        {{ value.label }}
-                    {% else %}
-                        {{ value.value }}
-                    {% endif %}
-                {% endif %}
-            </dd>
-            {% endif %}
-        {% endfor %}
-    </div>
+    <!-- <div class="row"> -->
+        {{ render_attr_vals(attr_map_vals) }}
+    <!-- </div> -->
 </section>
 
 <section class="myldapi-section">

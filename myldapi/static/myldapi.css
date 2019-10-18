@@ -13,3 +13,6 @@ body {
     font-family: monospace;    
 }
 
+.object-indent {
+    margin-left: 3rem;
+}

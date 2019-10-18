@@ -4,7 +4,7 @@
 <section class="myldapi-section">
     <div class="row">
         <div class="col-12">
-            {% set item_type_am, item_type_v = find_prop(attr_map, 'contained_item_class') %}
+            {% set item_type_am, item_type_v = find_prop(attr_map_vals, 'contained_item_class') %}
             <h1><a href="{{type_uri}}">{{ type_name }}</a> of <a href="{{item_type_v.uri}}">{{ item_type_v.label }}</a></h1>
             <p class="lead">{{ uri }}</p>
         </div>
@@ -16,8 +16,8 @@
         <div class="col-md-4">
             <h3>Items in this Register:</h3>
             <ul>
-                {% set am, v = find_prop(attr_map, 'uris') %}
-                {% set am_ep, v_ep = find_prop(attr_map, 'endpoint') %}
+                {% set am, v = find_prop(attr_map_vals, 'uris') %}
+                {% set am_ep, v_ep = find_prop(attr_map_vals, 'endpoint') %}
                 {% for uri_val in v.value %}                
                 <li>
                     <!-- Could debate if we use official URI, or app relative URI here -->

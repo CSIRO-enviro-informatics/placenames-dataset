@@ -9,6 +9,10 @@ class AddressSite(SourceRegister):
     def __init__(self):  
 
         geo_code_attrs = [
+                AttributeMapping(varname="label", 
+                                 label="Code Type",
+                                 col_name="codes.geocode.preflabel",
+                                 predicate=Pred(RDFS.label)),
                 AttributeMapping(varname="longitude", 
                                  label="Longitude",
                                  col_name="gnaf.address_site_geocode.longitude",
@@ -17,10 +21,6 @@ class AddressSite(SourceRegister):
                                  label="Latitude",
                                  col_name="gnaf.address_site_geocode.latitude",
                                  ),
-                AttributeMapping(varname="label", 
-                                 label="Code Type",
-                                 col_name="codes.geocode.preflabel",
-                                 predicate=Pred(RDFS.label)),
                 AttributeMapping(varname="gnafTypeUri", 
                                  col_name="codes.geocode.uri",
                                  predicate=Pred(GNAF.gnafType)),        
@@ -46,15 +46,11 @@ class AddressSite(SourceRegister):
                 # AttributeMapping(varname="comment", 
                 #                  label="Comment",
                 #                  predicate=Pred(RDFS.comment)),
-                # AttributeMapping(varname="geocodes", 
-                #                  typefunc=list, #allow many
-                #                  child_attrs=geo_code_attrs,
-                #                  predicate=Pred(GNAF.hasGeometry)),
-                AttributeMapping(varname="geometry",        
-                                 label="blah",                          
-                                 col_name=["gnaf.address_site_geocode.longitude", "gnaf.address_site_geocode.latitude"],
-                                 converter=wkt_converter,
-                                 predicate=Pred(GEO.asWKT)),
+                AttributeMapping(varname="geocodes", 
+                                 label="Geocodes",
+                                 child_attrs=geo_code_attrs,
+                                 col_name="gnaf.address_site_geocode.address_site_geocode_pid",
+                                 predicate=Pred(GNAF.hasGeometry)),
             ]
 
         source = DBSource(

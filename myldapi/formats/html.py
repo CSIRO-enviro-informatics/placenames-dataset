@@ -28,7 +28,7 @@ class HTMLFormat(Format):
             "type_name": parent_register.type_name,
             "view": view,
             "parent_register": parent_register,
-            "attr_map": props,
+            "attr_map_vals": props,
             "find_prop": find_prop
         }
         html_vars.update(kwargs)

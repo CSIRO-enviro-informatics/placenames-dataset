@@ -17,11 +17,11 @@ class JSONFormat(Format):
         return view.get_many_attributes(uri_list, parent_register, **kwargs)
 
     def render_details_as_text(self, details, uri, view, lang, parent_register, **kwargs):
-        attr_map = details
+        attr_map_vals = details
         deets = {}
 
         # Just the values
-        for am, v in attr_map:
+        for am, v in attr_map_vals:
             if v.uri:
                 val = v.uri
             if v.value:
@@ -33,7 +33,7 @@ class JSONFormat(Format):
             deets[am.varname] = val
 
         # All the details
-        # for am, v in attr_map:
+        # for am, v in attr_map_vals:
         #     obj = {}
         #     if v.uri:
         #         obj["uri"] = v.uri
