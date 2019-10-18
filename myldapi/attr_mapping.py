@@ -3,7 +3,7 @@ from rdflib import URIRef, BNode, Literal
 from rdflib.term import Identifier
 from .utils import find_prop
 class AttributeMapping:
-    def __init__(self, varname, label=None, typefunc=None, converter=None, units=None, predicate=None, **kwargs):
+    def __init__(self, varname, label=None, typefunc=None, converter=None, units=None, predicate=None, child_attrs=None, **kwargs):
         self.__dict__.update(kwargs)
         self.varname = varname
         self.label = label
@@ -11,6 +11,7 @@ class AttributeMapping:
         self.typefunc = typefunc
         self.converter = converter
         self.units = units
+        self.child_attrs = child_attrs
 
     def create_value(self, val):        
         typed_val = self.typefunc(val) if self.typefunc else val
