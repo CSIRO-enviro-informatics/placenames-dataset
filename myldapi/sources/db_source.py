@@ -107,11 +107,14 @@ class DBSource(Source):
                 attr_pairings.append((am, child_vals)) 
             else:
                 #At this stage, all records should be duplicates (same row data) for the remaining am_list attributes
-                record = records[0]                
-                cols = am.col_name if isinstance(am.col_name, list) else [am.col_name]
-                vals = [record[DBHelpers.col_key(c)] for c in cols]
-                val = vals if len(vals) > 1 else vals[0]
-                value = am.create_value(val) if val else None                    
+                record = records[0]   
+                if hasattr(am, "col_name"):
+                    cols = am.col_name if isinstance(am.col_name, list) else [am.col_name]
+                    vals = [record[DBHelpers.col_key(c)] for c in cols]
+                    val = vals if len(vals) > 1 else vals[0]
+                    value = am.create_value(val) if val else None                    
+                else:
+                    value = am.create_value(None)
                 attr_pairings.append((am, value))
 
         return attr_pairings

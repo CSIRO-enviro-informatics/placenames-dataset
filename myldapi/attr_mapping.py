@@ -36,7 +36,21 @@ class AttributeMapping:
         def converter(value):
             id = value
             uri = base_uri + id
-            return AttributeMappingValue(value, label, uri)
+            return AttributeMappingValue(value, None, uri)
+
+        return converter
+
+    @staticmethod
+    def is_uri_converter():
+        def converter(value):
+            return AttributeMappingValue(value, None, value)
+
+        return converter
+
+    @staticmethod
+    def literal_converter(literal):
+        def converter(value):
+            return AttributeMappingValue(literal, None)
 
         return converter
 

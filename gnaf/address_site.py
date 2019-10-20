@@ -9,6 +9,9 @@ class AddressSite(SourceRegister):
     def __init__(self):  
 
         geo_code_attrs = [
+                AttributeMapping(varname="a_type", 
+                                 converter=AttributeMapping.literal_converter(GNAF.Geocode),
+                                 predicate=Pred(RDF_a)),
                 AttributeMapping(varname="label", 
                                  label="Code Type",
                                  col_name="codes.geocode.preflabel",
@@ -38,7 +41,6 @@ class AddressSite(SourceRegister):
                 AttributeMapping(varname="gnafType", 
                                  label="GNAF Type",
                                  col_name="gnaf.address_site.address_type",
-                                 #need to convert to uri from the appropriate other col
                                  predicate=Pred(GNAF.gnafType)),
                 AttributeMapping(varname="name", 
                                  label="Name",

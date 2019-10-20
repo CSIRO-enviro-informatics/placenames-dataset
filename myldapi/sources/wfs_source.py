@@ -39,18 +39,22 @@ class WFSSource(Source):
         return obj_attr_list
 
     def get_attr_from_tree(self, tree, am):
-        results = tree.xpath(f"//{am.wfs_attr}", namespaces=tree.getroot().nsmap)        
-        if len(results) > 1:
-            raise NotImplementedError("We currently dont handle WFS objects with multiple attributes of the same name")
-        elif len(results) == 0:
-            value = None
-        else:
-            if hasattr(am, "wfs_element_converter"):
-                result = am.wfs_element_converter(results[0], self.default_crs)
+        if hasattr(am, "wfs_attr"):
+            results = tree.xpath(f"//{am.wfs_attr}", namespaces=tree.getroot().nsmap)        
+            if len(results) > 1:
+                raise NotImplementedError("We currently dont handle WFS objects with multiple attributes of the same name")
+            elif len(results) == 0:
+                value = None
             else:
-                result = results[0].text #default to just take the te
-            value = am.create_value(result)
- 
+                if hasattr(am, "wfs_element_converter"):
+                    result = am.wfs_element_converter(results[0], self.default_crs)
+                else:
+                    result = results[0].text #default to just take the te
+                value = am.create_value(result)
+        else:
+            value = am.create_value(None)
+
+
         return value
 
 
