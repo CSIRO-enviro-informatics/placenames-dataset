@@ -130,4 +130,4 @@ class DBHelpers:
         
     @staticmethod
     def col_key(prop):
-        return prop.split('.')[-1]
+        return prop.split(" as ")[-1].split('.')[-1]
