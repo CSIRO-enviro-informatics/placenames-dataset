@@ -3,6 +3,7 @@ import os
 import sys
 from flask import Flask
 from gnaf.address_site import AddressSite
+from gnaf.address import Address
 import gnaf.config
 from myldapi import MyLDApi
 
@@ -10,6 +11,7 @@ app = Flask(__name__, static_folder='gnaf/static', template_folder='gnaf/templat
 app.config.from_object(gnaf.config)
 
 myapi = MyLDApi(app, gnaf.config.DATASET_NAME, gnaf.config.DATASET_URI, [
+        Address(),
         AddressSite()
     ])
 
