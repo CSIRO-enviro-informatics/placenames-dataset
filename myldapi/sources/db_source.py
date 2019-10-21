@@ -87,23 +87,13 @@ class DBSource(Source):
         attr_pairings = []
         for i, am in enumerate(am_list):
             if am.child_attrs:
-                row_id = None
-                record_buffer = []
+                id_col_key = DBHelpers.col_key(am.col_name)
+                sorted_records = sorted(records, key=lambda rec: rec[id_col_key])
                 child_vals = []
-                for r in records:                    
-                    id = r[DBHelpers.col_key(am.col_name)]
-                    if not row_id:
-                        row_id = id
-                    if row_id != id:
-                        row_id = id
-                        am_vals = self.process_rows(record_buffer, am.child_attrs)
-                        child_vals.append(am_vals)
-                        record_buffer = []
-                    record_buffer.append(r)
-                if record_buffer:
-                    am_vals = self.process_rows(record_buffer, am.child_attrs)
+                for id, grouped_records in itertools.groupby(sorted_records, lambda x: x[id_col_key]):
+                    am_vals = self.process_rows(list(grouped_records), am.child_attrs)
                     child_vals.append(am_vals)
-                
+                                    
                 attr_pairings.append((am, child_vals)) 
             else:
                 #At this stage, all records should be duplicates (same row data) for the remaining am_list attributes
