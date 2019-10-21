@@ -1,4 +1,4 @@
-import requests, psycopg2, psycopg2.extras
+import requests, psycopg2, psycopg2.extras, itertools
 from lxml import etree
 from functools import lru_cache
 from .source import Source
@@ -14,15 +14,17 @@ class DBSource(Source):
 
     @lru_cache(maxsize=1)
     def get_count(self):
-        with DBHelpers.get_connection(self.conn_str) as conn, DBHelpers.get_cursor(conn) as cur:
-            q = f"SELECT COUNT({self.id_prop}) FROM {self.from_query}"
+        with DBHelpers.get_connection(self.conn_str) as conn, DBHelpers.get_cursor(conn) as cur:            
+            first_table = self.from_query.split(" ")[0]
+            q = f"SELECT COUNT({self.id_prop}) FROM {first_table}"
             cur.execute(q)
             return cur.fetchone()[0]
 
     def get_ids(self, startindex, take_count):
         with DBHelpers.get_connection(self.conn_str) as conn, DBHelpers.get_cursor(conn) as cur:
+            first_table = self.from_query.split(" ")[0]
             q = f"""SELECT {self.id_prop} 
-                  FROM {self.from_query} 
+                  FROM {first_table} 
                   ORDER BY {self.id_prop} 
                   LIMIT {take_count} 
                   OFFSET {startindex}"""
